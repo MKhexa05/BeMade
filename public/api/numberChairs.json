@@ -1,0 +1,27 @@
+{
+  "rectangular": [
+    { "min": 1200, "max": 1400, "tightFit": 6, "comfortFit": 4 },
+    { "min": 1500, "max": 1700, "tightFit": null, "comfortFit": 6 },
+    { "min": 1800, "max": 1900, "tightFit": 8, "comfortFit": 6 },
+    { "min": 2000, "max": 2300, "tightFit": null, "comfortFit": 8 },
+    { "min": 2400, "max": 2500, "tightFit": 10, "comfortFit": 8 },
+    { "min": 2600, "max": 2900, "tightFit": null, "comfortFit": 10 },
+    { "min": 3000, "max": 3000, "tightFit": 12, "comfortFit": 10 },
+    { "min": 3100, "max": 3180, "tightFit": null, "comfortFit": 12 }
+  ],
+  "round": [
+    { "diameter": 1200, "tightFit": 6, "comfortFit": null },
+    { "diameter": 1300, "tightFit": null, "comfortFit": 6 },
+    { "diameter": 1400, "tightFit": 7, "comfortFit": 6 },
+    { "diameter": 1500, "tightFit": null, "comfortFit": 7 },
+    { "diameter": 1580, "tightFit": 8, "comfortFit": null }
+  ],
+  "square": [
+    { "size": 1200, "tightFit": null, "comfortFit": 6 },
+    { "size": 1300, "tightFit": null, "comfortFit": 6 },
+    { "size": 1400, "tightFit": null, "comfortFit": 8 },
+    { "size": 1500, "tightFit": null, "comfortFit": 8 },
+    { "size": 1580, "tightFit": null, "comfortFit": 8 }
+  ]
+}
+   

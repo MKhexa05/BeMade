@@ -1,0 +1,90 @@
+[
+  {
+    "name": "linea",
+    "previewUrl": "assets/images/base-shape/linea/preview.webp",
+    "modelUrl": "assets/images/base-shape/linea/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 1600
+  },
+  {
+    "name": "linea-contour",
+    "previewUrl": "assets/images/base-shape/linea-contour/preview.webp",
+    "modelUrl": "assets/images/base-shape/linea-contour/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 2000
+  },
+  {
+    "name": "linea-dome",
+    "previewUrl": "assets/images/base-shape/linea-dome/preview.webp",
+    "modelUrl": "assets/images/base-shape/linea-dome/model.glb",
+    "available_topShape": ["round", "square"],
+    "maxLength": 1580,
+    "minLength": 1200
+  },
+  {
+    "name": "moon",
+    "previewUrl": "assets/images/base-shape/moon/preview.webp",
+    "modelUrl": "assets/images/base-shape/moon/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 1600
+  },
+  {
+    "name": "thrio",
+    "previewUrl": "assets/images/base-shape/thrio/preview.webp",
+    "modelUrl": "assets/images/base-shape/thrio/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 2470
+  },
+  {
+    "name": "twiste",
+    "previewUrl": "assets/images/base-shape/twiste/preview.webp",
+    "modelUrl": "assets/images/base-shape/twiste/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 2200
+  },
+  {
+    "name": "axis",
+    "previewUrl": "assets/images/base-shape/axis/preview.webp",
+    "modelUrl": "assets/images/base-shape/axis/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 1600
+  },
+  {
+    "name": "base-8",
+    "previewUrl": "assets/images/base-shape/base-8/preview.webp",
+    "modelUrl": "assets/images/base-shape/base-8/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 2200
+  },
+  {
+    "name": "butterfly",
+    "previewUrl": "assets/images/base-shape/butterfly/preview.webp",
+    "modelUrl": "assets/images/base-shape/butterfly/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 2200
+  },
+  {
+    "name": "cradle",
+    "previewUrl": "assets/images/base-shape/cradle/preview.webp",
+    "modelUrl": "assets/images/base-shape/cradle/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 1600
+  },
+  {
+    "name": "curva",
+    "previewUrl": "assets/images/base-shape/curva/preview.webp",
+    "modelUrl": "assets/images/base-shape/curva/model.glb",
+    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
+    "maxLength": 3180,
+    "minLength": 1800
+  }
+]

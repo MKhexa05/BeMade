@@ -1,0 +1,24 @@
+{
+  "rectangular": [
+    { "min": 1600, "max": 2200, "price": 2880 },
+    { "min": 2250, "max": 2450, "price": 3312 },
+    { "min": 2500, "max": 2850, "price": 3576 },
+    { "min": 2900, "max": 3180, "price": 3840 }
+  ],
+
+  "square": [
+    { "size": 1200, "price": 2190 },
+    { "size": 1300, "price": 2380 },
+    { "size": 1400, "price": 2650 },
+    { "size": 1500, "price": 2880 },
+    { "size": 1580, "price": 2880 }
+  ],
+
+  "round": [
+    { "size": 1200, "price": 2290 },
+    { "size": 1300, "price": 2480 },
+    { "size": 1400, "price": 2750 },
+    { "size": 1500, "price": 2980 },
+    { "size": 1580, "price": 2980 }
+  ]
+}
