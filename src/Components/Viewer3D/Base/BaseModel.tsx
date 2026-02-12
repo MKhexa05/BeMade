@@ -130,7 +130,9 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
         if (!(child instanceof THREE.Mesh)) return;
         if (castShadow) child.castShadow = true;
         if (Array.isArray(child.material)) {
-          child.material = child.material.map(() => new THREE.MeshStandardMaterial());
+          child.material = child.material.map(
+            () => new THREE.MeshStandardMaterial(),
+          );
           child.material.forEach((mat: THREE.Material) => {
             mat.needsUpdate = true;
           });
@@ -163,7 +165,9 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
           mat.metalness = 0.75;
           mat.side =
             selectedBaseShape == "linea" ? THREE.DoubleSide : THREE.FrontSide;
-          mat.color.set("gold");
+          mat.color = textureUrl.name.includes("gold")
+            ? new THREE.Color("#f5e8d0")
+            : new THREE.Color(0xffffff);
           mat.needsUpdate = true;
         });
       });

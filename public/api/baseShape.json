@@ -32,14 +32,6 @@
     "minLength": 1600
   },
   {
-    "name": "thrio",
-    "previewUrl": "assets/images/base-shape/thrio/preview.webp",
-    "modelUrl": "assets/images/base-shape/thrio/model.glb",
-    "available_topShape": ["capsule", "rectangle", "oval", "oblong"],
-    "maxLength": 3180,
-    "minLength": 2470
-  },
-  {
     "name": "twiste",
     "previewUrl": "assets/images/base-shape/twiste/preview.webp",
     "modelUrl": "assets/images/base-shape/twiste/model.glb",
