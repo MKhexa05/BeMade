@@ -10,7 +10,7 @@ const Canvas3D = observer(({ children }: { children: React.ReactNode }) => {
     <Canvas
       className="canvas-3d"
       shadows
-      gl={{ preserveDrawingBuffer: true }}
+      gl={{ preserveDrawingBuffer: false }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
       }}
