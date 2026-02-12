@@ -1,7 +1,7 @@
 import { useGLTF, useTexture } from "@react-three/drei";
 import type { TopColor, TopShapeInfo } from "../../../Types/types";
 import * as THREE from "three";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { observer } from "mobx-react";
 
@@ -22,41 +22,33 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
 
   const topModel = useGLTF(modelUrl.modelUrl);
   const topMDFModel = useGLTF(modelUrl.modelMDFUrl);
+  const preparedScenesRef = useRef(new WeakSet<THREE.Object3D>());
 
-  const [materialsCreated, setMaterialsCreated] = useState(false);
-
-  // Create fresh MeshStandardMaterial instances for all meshes in the
-  // topModel and topMDFModel when the models themselves change. This
-  // runs only when the model object references change ("only once" per
-  // model load) so subsequent texture updates will reuse these materials.
   useEffect(() => {
-    setMaterialsCreated(false);
-    if (topModel?.scene) {
-      topModel.scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
+    const prepareSceneMaterials = (
+      scene: THREE.Object3D | null | undefined,
+      castShadow: boolean,
+    ) => {
+      if (!scene || preparedScenesRef.current.has(scene)) return;
+      scene.traverse((child) => {
+        if (!(child instanceof THREE.Mesh)) return;
+        if (castShadow) child.castShadow = true;
+        if (Array.isArray(child.material)) {
+          child.material = child.material.map(() => new THREE.MeshStandardMaterial());
+          child.material.forEach((mat: THREE.Material) => {
+            mat.needsUpdate = true;
+          });
+        } else {
           child.material = new THREE.MeshStandardMaterial();
           child.material.needsUpdate = true;
-          child.castShadow = true;
-          // child.receiveShadow = true;
         }
       });
-    }
+      preparedScenesRef.current.add(scene);
+    };
 
-    if (topMDFModel?.scene) {
-      topMDFModel.scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.material = new THREE.MeshStandardMaterial();
-          child.material.needsUpdate = true;
-        }
-      });
-    }
-
-    // Signal that materials have been created for the current models so
-    // texture-application effects can run afterwards.
-    setMaterialsCreated(true);
-    // Intentionally only depend on the model references so this effect
-    // runs once per model load.
-  }, [topModel, topMDFModel]);
+    prepareSceneMaterials(topModel?.scene, true);
+    prepareSceneMaterials(topMDFModel?.scene, false);
+  }, [topModel?.scene, topMDFModel?.scene]);
 
   const topTextures = useTexture({
     map: textureUrl.colorUrl,
@@ -65,16 +57,41 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
     metalnessMap: textureUrl.metalnessUrl,
     topMDFTexture: textureUrl.mdfColorUrl,
   });
-  topTextures.normalMap.colorSpace = THREE.LinearSRGBColorSpace;
-  topTextures.roughnessMap.colorSpace = THREE.LinearSRGBColorSpace;
-  topTextures.metalnessMap.colorSpace = THREE.LinearSRGBColorSpace;
-  topTextures.map.colorSpace = THREE.SRGBColorSpace;
-  topTextures.topMDFTexture.colorSpace = THREE.SRGBColorSpace;
+
+  useEffect(() => {
+    if (topTextures.normalMap) {
+      topTextures.normalMap.colorSpace = THREE.LinearSRGBColorSpace;
+    }
+    if (topTextures.roughnessMap) {
+      topTextures.roughnessMap.colorSpace = THREE.LinearSRGBColorSpace;
+    }
+    if (topTextures.metalnessMap) {
+      topTextures.metalnessMap.colorSpace = THREE.LinearSRGBColorSpace;
+    }
+    if (topTextures.map) {
+      topTextures.map.colorSpace = THREE.SRGBColorSpace;
+    }
+    if (topTextures.topMDFTexture) {
+      topTextures.topMDFTexture.colorSpace = THREE.SRGBColorSpace;
+    }
+  }, [
+    topTextures.map,
+    topTextures.normalMap,
+    topTextures.roughnessMap,
+    topTextures.metalnessMap,
+    topTextures.topMDFTexture,
+  ]);
   const scaleX = maxLength > 0 ? selectedLength / maxLength : 1;
   const scaleZ = maxWidth > 0 ? selectedWidth / maxWidth : 1;
 
   useEffect(() => {
-    Object.values(topTextures).forEach((texture) => {
+    [
+      topTextures.map,
+      topTextures.normalMap,
+      topTextures.roughnessMap,
+      topTextures.metalnessMap,
+      topTextures.topMDFTexture,
+    ].forEach((texture) => {
       if (!texture) return;
       texture.flipY = false;
       texture.wrapS = THREE.RepeatWrapping;
@@ -87,45 +104,58 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
       texture.offset.set((1 - repeatX) * 0.5, (1 - repeatZ) * 0.5);
       texture.needsUpdate = true;
     });
-  }, [topTextures, scaleX, scaleZ]);
+  }, [
+    topTextures.map,
+    topTextures.normalMap,
+    topTextures.roughnessMap,
+    topTextures.metalnessMap,
+    topTextures.topMDFTexture,
+    scaleX,
+    scaleZ,
+  ]);
 
   useEffect(() => {
-    if (!materialsCreated) return;
     topModel.scene.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        child.material.map = topTextures.map;
-        child.material.normalMap = topTextures.normalMap;
-        child.material.metalnessMap = topTextures.metalnessMap;
-        child.material.roughnessMap = topTextures.roughnessMap;
-        child.material.needsUpdate = true;
-      }
+      if (!(child instanceof THREE.Mesh)) return;
+      const mats = Array.isArray(child.material)
+        ? child.material
+        : [child.material];
+      mats.forEach((mat) => {
+        if (!(mat instanceof THREE.MeshStandardMaterial)) return;
+        mat.map = topTextures.map ?? null;
+        mat.normalMap = topTextures.normalMap ?? null;
+        mat.metalnessMap = topTextures.metalnessMap ?? null;
+        mat.roughnessMap = topTextures.roughnessMap ?? null;
+        mat.needsUpdate = true;
+      });
     });
-  }, [topModel, topTextures, materialsCreated]);
+  }, [
+    topModel.scene,
+    topTextures.map,
+    topTextures.normalMap,
+    topTextures.metalnessMap,
+    topTextures.roughnessMap,
+  ]);
 
   useEffect(() => {
-    if (!materialsCreated) return;
     topMDFModel.scene.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        child.material.map = topTextures.topMDFTexture;
-        child.material.needsUpdate = true;
-      }
+      if (!(child instanceof THREE.Mesh)) return;
+      const mats = Array.isArray(child.material)
+        ? child.material
+        : [child.material];
+      mats.forEach((mat) => {
+        if (!(mat instanceof THREE.MeshStandardMaterial)) return;
+        mat.map = topTextures.topMDFTexture ?? null;
+        mat.needsUpdate = true;
+      });
     });
-  }, [topMDFModel, topTextures, materialsCreated]);
+  }, [topMDFModel.scene, topTextures.topMDFTexture]);
 
   // const animatorRef = useRef(new ScaleAnimator(0.12));
 
   useEffect(() => {
-    const topMeshes: THREE.Mesh[] = [];
-    topModel.scene.traverse((c) => {
-      if (c instanceof THREE.Mesh) topMeshes.push(c);
-    });
     baseMeshManager.setTopModel(topModel.scene);
-
-    const mdfMeshes: THREE.Mesh[] = [];
-    topMDFModel.scene.traverse((c) => {
-      if (c instanceof THREE.Mesh) mdfMeshes.push(c);
-    });
-  }, [topModel, topMDFModel]);
+  }, [baseMeshManager, topModel.scene]);
 
   // useEffect(() => {
   //   const sx = selectedLength / maxLength;
@@ -158,11 +188,11 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
     <>
       <primitive
         object={topModel.scene}
-        scale={[selectedLength / maxLength, 1, selectedWidth / maxWidth]}
+        scale={[scaleX, 1, scaleZ]}
       />
       <primitive
         object={topMDFModel.scene}
-        scale={[selectedLength / maxLength, 1, selectedWidth / maxWidth]}
+        scale={[scaleX, 1, scaleZ]}
       />
     </>
   );

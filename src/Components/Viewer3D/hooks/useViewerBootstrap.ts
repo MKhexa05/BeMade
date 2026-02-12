@@ -13,7 +13,7 @@ type UseViewerBootstrapArgs = {
 
 export const useViewerBootstrap = ({ stateManager }: UseViewerBootstrapArgs) => {
   const { design3DManager, designManager } = stateManager;
-  const { tableManager } = designManager;
+  const { tableManager, chairManager, priceManager } = designManager;
   const { baseShapeManager, topShapeManager, topColorManager } = tableManager;
   const { baseColorManager } = baseShapeManager;
 
@@ -24,6 +24,11 @@ export const useViewerBootstrap = ({ stateManager }: UseViewerBootstrapArgs) => 
     let cancelled = false;
 
     const loadInitialData = async () => {
+      const managerInitPromise = Promise.allSettled([
+        chairManager.init(),
+        priceManager.init(),
+      ]);
+
       const baseShapes = await baseShapeManager.loadBaseShapes();
       if (cancelled) return;
 
@@ -56,6 +61,9 @@ export const useViewerBootstrap = ({ stateManager }: UseViewerBootstrapArgs) => 
         if (defaultColor) topColorManager.setSelectedTopColor(defaultColor);
       }
 
+      await managerInitPromise;
+      if (cancelled) return;
+
       if (typeof window !== "undefined") {
         const sharedConfigEncoded = new URLSearchParams(window.location.search).get(
           SHARE_CONFIG_QUERY_KEY,
@@ -83,6 +91,8 @@ export const useViewerBootstrap = ({ stateManager }: UseViewerBootstrapArgs) => 
     baseColorManager,
     topShapeManager,
     topColorManager,
+    chairManager,
+    priceManager,
   ]);
 
   const sceneReady = useMemo(() => {

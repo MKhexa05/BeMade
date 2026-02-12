@@ -20,14 +20,30 @@ type PricingData = {
 
 export class PriceManager {
   private _libstate: StateManager;
-  private _priceInfoJson: PricingData;
+  private _priceInfoJson: PricingData | null = null;
   private _priceDataUrl = "api/price.json";
   private _totalPrice = 0;
+  private _initPromise: Promise<void> | null = null;
+  private _loadPricingPromise: Promise<void> | null = null;
 
   constructor(libstate: StateManager) {
     this._libstate = libstate;
-    this.loadPricingData();
     makeAutoObservable(this);
+    // Compatibility path while callers migrate to explicit init().
+    void this.init().catch(() => undefined);
+  }
+
+  async init() {
+    if (this._priceInfoJson) return;
+    if (this._initPromise) return this._initPromise;
+
+    this._initPromise = (async () => {
+      await this.loadPricingData();
+    })().finally(() => {
+      this._initPromise = null;
+    });
+
+    return this._initPromise;
   }
 
   getPrice(
@@ -58,12 +74,19 @@ export class PriceManager {
 
   async loadPricingData() {
     if (this._priceInfoJson) return;
+    if (this._loadPricingPromise) return this._loadPricingPromise;
 
-    const json = await fetch(this._priceDataUrl).then((r) => r.json());
+    this._loadPricingPromise = (async () => {
+      const json = await fetch(this._priceDataUrl).then((r) => r.json());
 
-    runInAction(() => {
-      this._priceInfoJson = json;
-      // console.log(this._priceInfoJson);
+      runInAction(() => {
+        this._priceInfoJson = json;
+        // console.log(this._priceInfoJson);
+      });
+    })().finally(() => {
+      this._loadPricingPromise = null;
     });
+
+    return this._loadPricingPromise;
   }
 }

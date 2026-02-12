@@ -39,6 +39,9 @@ export class ChairManager {
   private _numberOfChairsInfoJson: NumberChair | null = null;
   private _comfortFit: number | null = 0;
   private _tightFit: number | null = 0;
+  private _initPromise: Promise<void> | null = null;
+  private _loadChairPromise: Promise<void> | null = null;
+  private _loadNumberChairPromise: Promise<void> | null = null;
 
   //   CHANGE THIS
   private _maximumNumberOfChairs: number = 12;
@@ -46,9 +49,22 @@ export class ChairManager {
   constructor(libstate: StateManager) {
     this._libstate = libstate;
     makeAutoObservable(this);
-    this.loadNumberChair();
-    this.loadChair();
     this.setupChairRecommendationReaction();
+    // Compatibility path while callers migrate to explicit init().
+    void this.init().catch(() => undefined);
+  }
+
+  async init() {
+    if (this._chairInfoJson && this._numberOfChairsInfoJson) return;
+    if (this._initPromise) return this._initPromise;
+
+    this._initPromise = Promise.all([this.loadNumberChair(), this.loadChair()])
+      .then(() => undefined)
+      .finally(() => {
+        this._initPromise = null;
+      });
+
+    return this._initPromise;
   }
 
   get chairInfoJson() {
@@ -96,27 +112,42 @@ export class ChairManager {
 
   private async loadChair() {
     if (this._chairInfoJson) return;
+    if (this._loadChairPromise) return this._loadChairPromise;
 
-    const res = await fetch(this._chairInfoDataUrl);
-    const json: ChairInfo[] = await res.json();
+    this._loadChairPromise = (async () => {
+      const res = await fetch(this._chairInfoDataUrl);
+      const json: ChairInfo[] = await res.json();
 
-    runInAction(() => {
-      this._chairInfoJson = json;
-      this._selectedChairName = json[0].name;
-      this._selectedChairColorInfoJson = json[0].colors;
-      this._selectedColor = json[0].colors[0].name;
+      runInAction(() => {
+        this._chairInfoJson = json;
+        const firstChair = json[0] ?? null;
+        this._selectedChairName = firstChair?.name ?? null;
+        this._selectedChairColorInfoJson = firstChair?.colors ?? null;
+        this._selectedColor = firstChair?.colors?.[0]?.name ?? null;
+      });
+    })().finally(() => {
+      this._loadChairPromise = null;
     });
+
+    return this._loadChairPromise;
   }
 
   private async loadNumberChair() {
     if (this._numberOfChairsInfoJson) return;
+    if (this._loadNumberChairPromise) return this._loadNumberChairPromise;
 
-    const res = await fetch(this._numberChairDataUrl);
-    const json: NumberChair = await res.json();
+    this._loadNumberChairPromise = (async () => {
+      const res = await fetch(this._numberChairDataUrl);
+      const json: NumberChair = await res.json();
 
-    runInAction(() => {
-      this._numberOfChairsInfoJson = json;
+      runInAction(() => {
+        this._numberOfChairsInfoJson = json;
+      });
+    })().finally(() => {
+      this._loadNumberChairPromise = null;
     });
+
+    return this._loadNumberChairPromise;
   }
 
   private setupChairRecommendationReaction() {

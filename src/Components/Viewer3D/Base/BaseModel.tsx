@@ -1,7 +1,7 @@
 import { useGLTF, useTexture } from "@react-three/drei";
 import type { BaseColor } from "../../../Types/types";
 import * as THREE from "three";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import { useMainContext } from "../../../hooks/useMainContext";
 
@@ -17,7 +17,6 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
   const selectedLength = dimensionManager.selectedLength;
   const selectedBaseShape = baseShapeManager.selectedBaseShapeName;
   const maxLength = dimensionManager.maxLength;
-  const [materialsCreated, setMaterialsCreated] = useState(false);
 
   const gltf = useGLTF(modelUrl);
   const smallbaseModel = useGLTF(
@@ -28,6 +27,7 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
 
   const initialLegPositions = useRef<Record<string, number> | null>(null);
   const legMeshesRef = useRef<THREE.Mesh[] | null>(null);
+  const preparedScenesRef = useRef(new WeakSet<THREE.Object3D>());
 
   // Effect A: identify leg meshes and cache their original X positions when the active GLTF loads
   useEffect(() => {
@@ -99,73 +99,81 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
     roughnessMap: textureUrl.roughnessUrl,
     metalnessMap: textureUrl.metalnessUrl,
   });
-  // Set proper colorSpace for loaded textures and re-apply them whenever
-  // either the GLTF or the textures change. Handle meshes with array
-  // materials and mark materials as needing update.
-  baseTextures.normalMap.colorSpace = THREE.LinearSRGBColorSpace;
-  baseTextures.roughnessMap.colorSpace = THREE.LinearSRGBColorSpace;
-  baseTextures.metalnessMap.colorSpace = THREE.LinearSRGBColorSpace;
-  baseTextures.map.colorSpace = THREE.SRGBColorSpace;
 
   useEffect(() => {
-    setMaterialsCreated(false);
-    if (gltf?.scene) {
-      gltf.scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.castShadow = true;
-          // child.geometry
-          child.material = new THREE.MeshStandardMaterial();
-          child.material.needsUpdate = true;
-        }
-      });
+    if (baseTextures.normalMap) {
+      baseTextures.normalMap.colorSpace = THREE.LinearSRGBColorSpace;
     }
-    if (smallbaseModel?.scene) {
-      smallbaseModel.scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.material = new THREE.MeshStandardMaterial();
-          child.material.needsUpdate = true;
-        }
-      });
+    if (baseTextures.roughnessMap) {
+      baseTextures.roughnessMap.colorSpace = THREE.LinearSRGBColorSpace;
     }
-
-    // Signal that materials have been created for the current models so
-    // texture-application effects can run afterwards.
-    setMaterialsCreated(true);
-    // Intentionally only depend on the model references so this effect
-    // runs once per model load.
-  }, [gltf, smallbaseModel]);
-
-  useEffect(() => {
-    const sceneToInspect = smallModelActive
-      ? smallbaseModel?.scene
-      : gltf?.scene;
-    if (!sceneToInspect) return;
-    if (!materialsCreated) return;
-    sceneToInspect.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) return;
-      const mats = Array.isArray(child.material)
-        ? child.material
-        : [child.material];
-      mats.forEach((mat) => {
-        if (!mat) return;
-        if (baseTextures.map) mat.map = baseTextures.map;
-        if (baseTextures.normalMap) mat.normalMap = baseTextures.normalMap;
-        if (baseTextures.roughnessMap)
-          mat.roughnessMap = baseTextures.roughnessMap;
-        if (baseTextures.metalnessMap)
-          mat.metalnessMap = baseTextures.metalnessMap;
-        mat.metalness = 0.75;
-        mat.needsUpdate = true;
-        mat.side =
-          selectedBaseShape == "linea" ? THREE.DoubleSide : THREE.FrontSide;
-        mat.color = new THREE.Color("gold");
-      });
-    });
+    if (baseTextures.metalnessMap) {
+      baseTextures.metalnessMap.colorSpace = THREE.LinearSRGBColorSpace;
+    }
+    if (baseTextures.map) {
+      baseTextures.map.colorSpace = THREE.SRGBColorSpace;
+    }
   }, [
-    gltf,
-    materialsCreated,
-    smallbaseModel,
-    smallModelActive,
+    baseTextures.map,
+    baseTextures.normalMap,
+    baseTextures.roughnessMap,
+    baseTextures.metalnessMap,
+  ]);
+
+  useEffect(() => {
+    const prepareSceneMaterials = (
+      scene: THREE.Object3D | null | undefined,
+      castShadow: boolean,
+    ) => {
+      if (!scene || preparedScenesRef.current.has(scene)) return;
+      scene.traverse((child) => {
+        if (!(child instanceof THREE.Mesh)) return;
+        if (castShadow) child.castShadow = true;
+        if (Array.isArray(child.material)) {
+          child.material = child.material.map(() => new THREE.MeshStandardMaterial());
+          child.material.forEach((mat: THREE.Material) => {
+            mat.needsUpdate = true;
+          });
+        } else {
+          child.material = new THREE.MeshStandardMaterial();
+          child.material.needsUpdate = true;
+        }
+      });
+      preparedScenesRef.current.add(scene);
+    };
+
+    prepareSceneMaterials(gltf?.scene, true);
+    prepareSceneMaterials(smallbaseModel?.scene, false);
+  }, [gltf?.scene, smallbaseModel?.scene]);
+
+  useEffect(() => {
+    const applyMaterialMaps = (scene: THREE.Object3D | null | undefined) => {
+      if (!scene) return;
+      scene.traverse((child) => {
+        if (!(child instanceof THREE.Mesh)) return;
+        const mats = Array.isArray(child.material)
+          ? child.material
+          : [child.material];
+        mats.forEach((mat) => {
+          if (!(mat instanceof THREE.MeshStandardMaterial)) return;
+          mat.map = baseTextures.map ?? null;
+          mat.normalMap = baseTextures.normalMap ?? null;
+          mat.roughnessMap = baseTextures.roughnessMap ?? null;
+          mat.metalnessMap = baseTextures.metalnessMap ?? null;
+          mat.metalness = 0.75;
+          mat.side =
+            selectedBaseShape == "linea" ? THREE.DoubleSide : THREE.FrontSide;
+          mat.color.set("gold");
+          mat.needsUpdate = true;
+        });
+      });
+    };
+
+    applyMaterialMaps(gltf?.scene);
+    applyMaterialMaps(smallbaseModel?.scene);
+  }, [
+    gltf?.scene,
+    smallbaseModel?.scene,
     baseTextures.map,
     baseTextures.normalMap,
     baseTextures.roughnessMap,
