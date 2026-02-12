@@ -36,6 +36,7 @@ export type TopColorInfo = {
 
 export type TopColor = {
   name: string;
+  description?: string;
   colorUrl: string;
   mdfColorUrl: string;
   metalnessUrl: string;

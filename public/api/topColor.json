@@ -11,7 +11,8 @@
         "previewUrl": "/assets/images/top-color/amani_grey/preview.webp",
         "roughnessUrl": "/assets/images/top-color/amani_grey/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/amani_grey/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/amani_grey/model.glb"
+        "modelUrl": "/assets/images/top-color/amani_grey/model.glb",
+        "description": "A sophisticated grey stone with subtle veining and contemporary appeal."
       },
       {
         "name": "anatolia",
@@ -22,7 +23,8 @@
         "previewUrl": "/assets/images/top-color/anatolia/preview.webp",
         "roughnessUrl": "/assets/images/top-color/anatolia/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/anatolia/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/anatolia/model.glb"
+        "modelUrl": "/assets/images/top-color/anatolia/model.glb",
+        "description": "A sophisticated grey stone with subtle veining and contemporary appeal."
       },
       {
         "name": "calacatta_black",
@@ -33,7 +35,8 @@
         "previewUrl": "/assets/images/top-color/calacatta_black/preview.webp",
         "roughnessUrl": "/assets/images/top-color/calacatta_black/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/calacatta_black/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/calacatta_black/model.glb"
+        "modelUrl": "/assets/images/top-color/calacatta_black/model.glb",
+        "description": "A sophisticated black stone with white veining."
       },
       {
         "name": "pietra_stone",
@@ -44,7 +47,8 @@
         "previewUrl": "/assets/images/top-color/pietra_stone/preview.webp",
         "roughnessUrl": "/assets/images/top-color/pietra_stone/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/pietra_stone/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/pietra_stone/model.glb"
+        "modelUrl": "/assets/images/top-color/pietra_stone/model.glb",
+        "description": "A versatile stone with a classic feel."
       },
       {
         "name": "roman",
@@ -55,7 +59,8 @@
         "previewUrl": "/assets/images/top-color/roman/preview.webp",
         "roughnessUrl": "/assets/images/top-color/roman/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/roman/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/roman/model.glb"
+        "modelUrl": "/assets/images/top-color/roman/model.glb",
+        "description": "A sophisticated grey stone with contemporary appeal."
       },
       {
         "name": "storm",
@@ -66,7 +71,8 @@
         "previewUrl": "/assets/images/top-color/storm/preview.webp",
         "roughnessUrl": "/assets/images/top-color/storm/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/storm/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/storm/model.glb"
+        "modelUrl": "/assets/images/top-color/storm/model.glb",
+        "description": "A powerful stone with stormy patterns."
       },
       {
         "name": "magma",
@@ -77,7 +83,8 @@
         "previewUrl": "/assets/images/top-color/magma/preview.webp",
         "roughnessUrl": "/assets/images/top-color/magma/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/magma/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/magma/model.glb"
+        "modelUrl": "/assets/images/top-color/magma/model.glb",
+        "description": "A stone inspired by flowing lava."
       },
       {
         "name": "noce",
@@ -88,7 +95,8 @@
         "previewUrl": "/assets/images/top-color/noce/preview.webp",
         "roughnessUrl": "/assets/images/top-color/noce/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/noce/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/noce/model.glb"
+        "modelUrl": "/assets/images/top-color/noce/model.glb",
+        "description": "A sophisticated earthy stone."
       },
       {
         "name": "taj_mahal",
@@ -99,7 +107,8 @@
         "previewUrl": "/assets/images/top-color/taj_mahal/preview.webp",
         "roughnessUrl": "/assets/images/top-color/taj_mahal/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/taj_mahal/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/taj_mahal/model.glb"
+        "modelUrl": "/assets/images/top-color/taj_mahal/model.glb",
+        "description": "A natural finish Taj Mahal stone."
       },
       {
         "name": "velvet_black",
@@ -110,7 +119,8 @@
         "previewUrl": "/assets/images/top-color/velvet_black/preview.webp",
         "roughnessUrl": "/assets/images/top-color/velvet_black/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/velvet_black/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/velvet_black/model.glb"
+        "modelUrl": "/assets/images/top-color/velvet_black/model.glb",
+        "description": "A deep black stone with a velvety finish."
       },
       {
         "name": "sienna_bronze",
@@ -121,7 +131,8 @@
         "previewUrl": "/assets/images/top-color/sienna_bronze/preview.webp",
         "roughnessUrl": "/assets/images/top-color/sienna_bronze/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/sienna_bronze/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/sienna_bronze/model.glb"
+        "modelUrl": "/assets/images/top-color/sienna_bronze/model.glb",
+        "description": "A sophisticated bronze stone."
       },
       {
         "name": "vintage_bronze",
@@ -132,11 +143,11 @@
         "previewUrl": "/assets/images/top-color/vintage_bronze/preview.webp",
         "roughnessUrl": "/assets/images/top-color/vintage_bronze/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/vintage_bronze/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/vintage_bronze/model.glb"
+        "modelUrl": "/assets/images/top-color/vintage_bronze/model.glb",
+        "description": "A classic bronze stone with vintage appeal."
       }
     ]
   },
-
   {
     "type": "Polish",
     "colors": [
@@ -149,7 +160,8 @@
         "previewUrl": "/assets/images/top-color/fior/preview.webp",
         "roughnessUrl": "/assets/images/top-color/fior/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/fior/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/fior/model.glb"
+        "modelUrl": "/assets/images/top-color/fior/model.glb",
+        "description": "A sophisticated grey stone with a polished finish."
       },
       {
         "name": "aristocrat",
@@ -160,7 +172,8 @@
         "previewUrl": "/assets/images/top-color/aristocrat/preview.webp",
         "roughnessUrl": "/assets/images/top-color/aristocrat/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/aristocrat/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/aristocrat/model.glb"
+        "modelUrl": "/assets/images/top-color/aristocrat/model.glb",
+        "description": "A polished Aristocrat stone."
       },
       {
         "name": "mother_earth",
@@ -171,7 +184,8 @@
         "previewUrl": "/assets/images/top-color/mother_earth/preview.webp",
         "roughnessUrl": "/assets/images/top-color/mother_earth/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/mother_earth/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/mother_earth/model.glb"
+        "modelUrl": "/assets/images/top-color/mother_earth/model.glb",
+        "description": "A polished earth-toned stone."
       },
       {
         "name": "gold_onyx",
@@ -182,7 +196,8 @@
         "previewUrl": "/assets/images/top-color/gold_onyx/preview.webp",
         "roughnessUrl": "/assets/images/top-color/gold_onyx/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/gold_onyx/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/gold_onyx/model.glb"
+        "modelUrl": "/assets/images/top-color/gold_onyx/model.glb",
+        "description": "A polished gold onyx stone."
       },
       {
         "name": "lucid",
@@ -193,7 +208,8 @@
         "previewUrl": "/assets/images/top-color/lucid/preview.webp",
         "roughnessUrl": "/assets/images/top-color/lucid/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/lucid/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/lucid/model.glb"
+        "modelUrl": "/assets/images/top-color/lucid/model.glb",
+        "description": "A clear, polished stone."
       },
       {
         "name": "pearl_mist",
@@ -204,7 +220,8 @@
         "previewUrl": "/assets/images/top-color/pearl_mist/preview.webp",
         "roughnessUrl": "/assets/images/top-color/pearl_mist/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/pearl_mist/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/pearl_mist/model.glb"
+        "modelUrl": "/assets/images/top-color/pearl_mist/model.glb",
+        "description": "A pearlescent polished stone."
       },
       {
         "name": "calacatta_lux",
@@ -215,7 +232,8 @@
         "previewUrl": "/assets/images/top-color/calacatta_lux/preview.webp",
         "roughnessUrl": "/assets/images/top-color/calacatta_lux/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/calacatta_lux/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/calacatta_lux/model.glb"
+        "modelUrl": "/assets/images/top-color/calacatta_lux/model.glb",
+        "description": "A luxurious white marble."
       },
       {
         "name": "cartier_gold",
@@ -226,7 +244,8 @@
         "previewUrl": "/assets/images/top-color/cartier_gold/preview.webp",
         "roughnessUrl": "/assets/images/top-color/cartier_gold/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/cartier_gold/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/cartier_gold/model.glb"
+        "modelUrl": "/assets/images/top-color/cartier_gold/model.glb",
+        "description": "A gold stone with a silk finish."
       },
       {
         "name": "elegance",
@@ -237,7 +256,8 @@
         "previewUrl": "/assets/images/top-color/elegance/preview.webp",
         "roughnessUrl": "/assets/images/top-color/elegance/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/elegance/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/elegance/model.glb"
+        "modelUrl": "/assets/images/top-color/elegance/model.glb",
+        "description": "A refined polished stone."
       },
       {
         "name": "orova",
@@ -248,7 +268,8 @@
         "previewUrl": "/assets/images/top-color/orova/preview.webp",
         "roughnessUrl": "/assets/images/top-color/orova/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/orova/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/orova/model.glb"
+        "modelUrl": "/assets/images/top-color/orova/model.glb",
+        "description": "A polished premium stone."
       },
       {
         "name": "premium_gold",
@@ -259,7 +280,8 @@
         "previewUrl": "/assets/images/top-color/premium_gold/preview.webp",
         "roughnessUrl": "/assets/images/top-color/premium_gold/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/premium_gold/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/premium_gold/model.glb"
+        "modelUrl": "/assets/images/top-color/premium_gold/model.glb",
+        "description": "A polished gold-veined stone."
       },
       {
         "name": "velvet",
@@ -270,7 +292,8 @@
         "previewUrl": "/assets/images/top-color/velvet/preview.webp",
         "roughnessUrl": "/assets/images/top-color/velvet/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/velvet/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/velvet/model.glb"
+        "modelUrl": "/assets/images/top-color/velvet/model.glb",
+        "description": "A polished velvety stone."
       },
       {
         "name": "veneto",
@@ -281,7 +304,8 @@
         "previewUrl": "/assets/images/top-color/veneto/preview.webp",
         "roughnessUrl": "/assets/images/top-color/veneto/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/veneto/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/veneto/model.glb"
+        "modelUrl": "/assets/images/top-color/veneto/model.glb",
+        "description": "A polished Italian stone."
       },
       {
         "name": "venus_vein",
@@ -292,7 +316,8 @@
         "previewUrl": "/assets/images/top-color/venus_vein/preview.webp",
         "roughnessUrl": "/assets/images/top-color/venus_vein/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/venus_vein/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/venus_vein/model.glb"
+        "modelUrl": "/assets/images/top-color/venus_vein/model.glb",
+        "description": "A stone with graceful veining."
       },
       {
         "name": "desert_dune",
@@ -303,11 +328,11 @@
         "previewUrl": "/assets/images/top-color/desert_dune/preview.webp",
         "roughnessUrl": "/assets/images/top-color/desert_dune/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/desert_dune/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/desert_dune/model.glb"
+        "modelUrl": "/assets/images/top-color/desert_dune/model.glb",
+        "description": "A polished sandy stone."
       }
     ]
   },
-
   {
     "type": "Silk",
     "colors": [
@@ -320,7 +345,8 @@
         "previewUrl": "/assets/images/top-color/shadow_white/preview.webp",
         "roughnessUrl": "/assets/images/top-color/shadow_white/roughness.webp",
         "samplePreviewUrl": "/assets/images/top-color/shadow_white/sample_preview.webp",
-        "modelUrl": "/assets/images/top-color/shadow_white/model.glb"
+        "modelUrl": "/assets/images/top-color/shadow_white/model.glb",
+        "description": "A white stone with a silk finish."
       }
     ]
   }

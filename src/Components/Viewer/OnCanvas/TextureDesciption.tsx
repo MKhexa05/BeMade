@@ -1,7 +1,28 @@
-import { useState } from "react";
+import { observer } from "mobx-react";
+import { useMemo, useState } from "react";
+import { useMainContext } from "../../../hooks/useMainContext";
+import { formatLabel } from "../../../Utils/formatLabel";
 
-const TextureDesciption = () => {
+const TextureDesciption = observer(() => {
+  const { designManager } = useMainContext();
+  const { topColorManager } = designManager.tableManager;
   const [isOpen, setIsOpen] = useState(false);
+
+  const selectedTopColor = topColorManager.selectedTopColor;
+  const selectedTopColorInfo = useMemo(() => {
+    if (!selectedTopColor) return null;
+    for (const group of topColorManager.topColorInfoJson ?? []) {
+      const color = group.colors.find((entry) => entry.name === selectedTopColor);
+      if (color) return { color, type: group.type };
+    }
+    return null;
+  }, [topColorManager.topColorInfoJson, selectedTopColor]);
+
+  const title = selectedTopColor ? formatLabel(selectedTopColor) : "Top Color";
+  const finish = selectedTopColorInfo?.type ?? "N/A";
+  const description =
+    selectedTopColorInfo?.color.description ??
+    "Select a top color to view texture details.";
 
   return (
     <div className="absolute left-3 lg:left-5 bottom-3 lg:bottom-5 z-50">
@@ -56,14 +77,13 @@ const TextureDesciption = () => {
                 </svg>
               </button>
               <p className="text-[var(--color-primary)] font-semibold text-base md:text-lg mb-2 capitalize">
-                Amani Grey
+                {title}
               </p>
               <p className="text-[var(--color-font)] font-semibold text-xs lg:text-sm bg-[var(--color-grid-bg)] 2xl:bg-[var(--color-secondary)] px-3 py-1 rounded-[33px] mb-2 w-fit capitalize">
-                Natural
+                {finish}
               </p>
               <p className="text-[var(--color-font)] text-xs lg:text-sm line-clamp-3 md:line-clamp-2 leading-normal">
-                A sophisticated grey stone with subtle veining and contemporary
-                appeal. Perfect for modern workspaces.
+                {description}
               </p>
             </div>
           </div>
@@ -71,6 +91,6 @@ const TextureDesciption = () => {
       </div>
     </div>
   );
-};
+});
 
 export default TextureDesciption;
