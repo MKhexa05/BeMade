@@ -2,6 +2,9 @@ import { type ChangeEvent, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import OrderSummary from "../MainContents/OrderSummary";
+import CheckoutLogin from "./CheckoutLogin";
+import CheckoutSignup from "./CheckoutSignup";
+import { isUserAuthenticated, setUserAuthenticated } from "../../../Utils/auth";
 import {
   ORDER_PREVIEW_STORAGE_KEY,
   resolveCheckoutContext,
@@ -17,6 +20,8 @@ interface FormData {
   phoneNumber: string;
   email: string;
 }
+
+type AuthMode = "login" | "signup";
 
 const CheckoutPage = observer(() => {
   const navigate = useNavigate();
@@ -36,6 +41,10 @@ const CheckoutPage = observer(() => {
     phoneNumber: "",
     email: "",
   });
+  const [authMode, setAuthMode] = useState<AuthMode>("login");
+  const [isCheckoutUnlocked, setIsCheckoutUnlocked] = useState(
+    isUserAuthenticated(),
+  );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,6 +75,41 @@ const CheckoutPage = observer(() => {
     if (!raw.startsWith("data:image/")) return null;
     return raw;
   }, [isSampleCheckout]);
+
+  if (!isCheckoutUnlocked) {
+    return (
+      <div className="min-h-screen bg-[#f5f5f5]">
+        <div className="h-[72px] bg-white border-b border-gray-200 flex items-center px-4 lg:px-8">
+          <img
+            src="/assets/images/header_logo.svg"
+            alt="BeMade"
+            className="h-10 w-auto object-contain"
+          />
+        </div>
+        <div className="flex min-h-[calc(100vh-72px)] items-center justify-center px-4 py-10">
+          {authMode === "login" ? (
+            <CheckoutLogin
+              onBack={() => navigate("/")}
+              onLogin={() => {
+                setUserAuthenticated(true);
+                setIsCheckoutUnlocked(true);
+              }}
+              onSwitchToSignup={() => setAuthMode("signup")}
+            />
+          ) : (
+            <CheckoutSignup
+              onBack={() => navigate("/")}
+              onSignup={() => {
+                setUserAuthenticated(true);
+                setIsCheckoutUnlocked(true);
+              }}
+              onSwitchToLogin={() => setAuthMode("login")}
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">

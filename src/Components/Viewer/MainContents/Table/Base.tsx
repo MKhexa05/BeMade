@@ -1,5 +1,4 @@
 import { observer } from "mobx-react";
-import { useEffect } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { formatLabel } from "../../../../Utils/formatLabel";
 
@@ -7,12 +6,6 @@ const Base = observer(() => {
   const { designManager } = useMainContext();
   const { tableManager, dimensionManager } = designManager;
   const { baseShapeManager } = tableManager;
-  const { baseColorManager } = baseShapeManager;
-
-  useEffect(() => {
-    void baseShapeManager.loadBaseShapes();
-    void baseColorManager.loadBaseColor();
-  }, [baseShapeManager, baseColorManager]);
 
   const data = baseShapeManager.baseShapeInfo;
 

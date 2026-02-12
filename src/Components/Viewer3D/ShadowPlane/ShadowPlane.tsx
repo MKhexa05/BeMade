@@ -4,14 +4,12 @@ import { observer } from "mobx-react";
 
 const ShadowPlane = observer(() => {
   const { designManager, design3DManager } = useMainContext();
-  const { chairManager, dimensionManager } = designManager;
+  const { chairManager } = designManager;
   const { cameraManager, baseMeshManager } = design3DManager;
   const numberOfChairs = chairManager.numberOfChairs || 1;
   const currentPreset = cameraManager.currentPreset ?? "front";
   const topModelVersion = baseMeshManager.topModelVersion;
   const isTwoChairView = currentPreset === "two_chair";
-  const selectedLength = dimensionManager.selectedLength;
-  const selectedwidth = dimensionManager.selectedWidth;
 
   const shadowKey = `${currentPreset}-${numberOfChairs}-${topModelVersion}`;
 

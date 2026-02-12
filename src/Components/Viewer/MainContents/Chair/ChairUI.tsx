@@ -4,12 +4,12 @@ import { formatLabel } from "../../../../Utils/formatLabel";
 import { useMemo, useState } from "react";
 
 const SHAPE_TO_PDF_PAGE: Record<string, number> = {
-  rectangle: 1,
-  capsule: 2,
-  square: 3,
-  round: 4,
-  oval: 5,
-  oblong: 6,
+  capsule: 1,
+  rectangle: 2,
+  oblong: 3,
+  oval: 4,
+  round: 5,
+  square: 5,
 };
 
 const Chair = observer(() => {
@@ -214,15 +214,17 @@ const Chair = observer(() => {
       </div>
       {isGuideOpen && (
         <div className="fixed inset-0 z-[120] bg-black/40 flex items-center justify-center p-3">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-5xl h-[85vh] overflow-hidden">
+          <div className="bg-(--color-primary) rounded-2xl shadow-xl w-full max-w-4xl h-[85vh] overflow-hidden">
+            {" "}
             <div className="h-12 border-b border-black/10 px-4 flex items-center justify-between">
-              <p className="text-sm md:text-base font-semibold text-[var(--color-font)]">
+              <p className="text-sm md:text-base font-semibold text-[var(--color-secondary)] ">
+                {" "}
                 Chair Size Chart - {formatLabel(selectedTopShape || "default")}
               </p>
               <button
                 type="button"
                 onClick={() => setIsGuideOpen(false)}
-                className="text-black/70 hover:text-black"
+                className="text-(--color-secondary) hover:text-black"
                 aria-label="Close chair size chart"
               >
                 <svg
@@ -238,11 +240,13 @@ const Chair = observer(() => {
                 </svg>
               </button>
             </div>
-            <iframe
-              title="Chair size chart"
-              src={`/assets/images/chair_size_chart.pdf#page=${selectedGuidePage}&view=FitH&zoom=page-fit&pagemode=none&toolbar=0&navpanes=0&scrollbar=0`}
-              className="w-full h-[calc(85vh-48px)] border-0"
-            />
+            <div className="relative w-full bg-white">
+              <img
+                src={`/assets/images/chair_size/${selectedGuidePage}.png`}
+                alt={`Chair size chart page ${selectedGuidePage}`}
+                className=" h-full object-cover"
+              />
+            </div>
           </div>
         </div>
       )}

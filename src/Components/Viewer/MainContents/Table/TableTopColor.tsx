@@ -1,5 +1,4 @@
 import { observer } from "mobx-react";
-import { useEffect } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { formatLabel } from "../../../../Utils/formatLabel";
 
@@ -7,10 +6,6 @@ const TableTopColor = observer(() => {
   const { designManager } = useMainContext();
   const { tableManager } = designManager;
   const { topColorManager } = tableManager;
-
-  useEffect(() => {
-    void topColorManager.loadTopColors();
-  }, [topColorManager]);
 
   const data = topColorManager.topColorInfoJson;
 

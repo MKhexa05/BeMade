@@ -5,14 +5,11 @@ import { TopShapeManager } from "./TableManagers/TopShapeManager";
 import { TopColorManager } from "./TableManagers/TopColorManager";
 
 export class TableManager {
-  private _libstate: StateManager;
-
   private _baseManager: BaseShapeManager;
   private _topShapeManager: TopShapeManager;
   private _topColorManager: TopColorManager;
 
   constructor(libstate: StateManager) {
-    this._libstate = libstate;
     this._baseManager = new BaseShapeManager(libstate);
     this._topShapeManager = new TopShapeManager(libstate);
     this._topColorManager = new TopColorManager(libstate);

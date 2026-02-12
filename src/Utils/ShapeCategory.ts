@@ -1,8 +1,11 @@
-export enum TableShapeCategory {
-  RECTANGULAR = "rectangular",
-  ROUND = "round",
-  SQUARE = "square",
-}
+export const TABLE_SHAPE_CATEGORY = {
+  RECTANGULAR: "rectangular",
+  ROUND: "round",
+  SQUARE: "square",
+} as const;
+
+export type TableShapeCategory =
+  (typeof TABLE_SHAPE_CATEGORY)[keyof typeof TABLE_SHAPE_CATEGORY];
 
 export function getShapeCategory(
   shapeName: string | null,
@@ -14,11 +17,10 @@ export function getShapeCategory(
   const squareShapes = ["square"];
 
   if (rectangularShapes.includes(shapeName))
-    return TableShapeCategory.RECTANGULAR;
+    return TABLE_SHAPE_CATEGORY.RECTANGULAR;
 
-  if (roundShapes.includes(shapeName)) return TableShapeCategory.ROUND;
+  if (roundShapes.includes(shapeName)) return TABLE_SHAPE_CATEGORY.ROUND;
 
-  if (squareShapes.includes(shapeName)) return TableShapeCategory.SQUARE;
-
+  if (squareShapes.includes(shapeName)) return TABLE_SHAPE_CATEGORY.SQUARE;
   return null;
 }

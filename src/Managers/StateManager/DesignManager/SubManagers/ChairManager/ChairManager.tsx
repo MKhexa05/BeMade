@@ -164,31 +164,35 @@ export class ChairManager {
         return {
           length: dimensionManager.selectedLength,
           shape: topShapeManager.selectedTopShapeName,
+          numberData,
         };
       },
-      (data: { length: number; shape: string | null } | null) => {
+      (
+        data: {
+          length: number;
+          shape: string | null;
+          numberData: NumberChair | null;
+        } | null,
+      ) => {
         if (!this._numberOfChairsInfoJson) return;
         if (!data) return;
-        const { length, shape } = data;
+        const { length, shape, numberData } = data;
+        if (!numberData) return;
         let result = null;
         const category = getShapeCategory(shape);
 
         if (category === "rectangular") {
-          result = this._numberOfChairsInfoJson.rectangular.find(
+          result = numberData.rectangular.find(
             (r) => length >= r.min && length <= r.max,
           );
         }
 
         if (category === "round") {
-          result = this._numberOfChairsInfoJson.round.find(
-            (r) => r.diameter === length,
-          );
+          result = numberData.round.find((r) => r.diameter === length);
         }
 
         if (category === "square") {
-          result = this._numberOfChairsInfoJson.square.find(
-            (r) => r.size === length,
-          );
+          result = numberData.square.find((r) => r.size === length);
         }
 
         runInAction(() => {

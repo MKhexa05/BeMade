@@ -19,7 +19,6 @@ type PricingData = {
 };
 
 export class PriceManager {
-  private _libstate: StateManager;
   private _priceInfoJson: PricingData | null = null;
   private _priceDataUrl = "api/price.json";
   private _totalPrice = 0;
@@ -27,7 +26,7 @@ export class PriceManager {
   private _loadPricingPromise: Promise<void> | null = null;
 
   constructor(libstate: StateManager) {
-    this._libstate = libstate;
+    void libstate;
     makeAutoObservable(this);
     // Compatibility path while callers migrate to explicit init().
     void this.init().catch(() => undefined);

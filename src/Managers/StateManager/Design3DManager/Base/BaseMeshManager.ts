@@ -1,23 +1,15 @@
 import { makeAutoObservable } from "mobx";
 import type { StateManager } from "../../StateManager";
 import * as THREE from "three";
-
-type BaseShapeMesh = {
-  name: string;
-  scene: THREE.Scene;
-};
-
 export class BaseMeshManager {
-  private _libstate: StateManager;
   private _selectedBaseShapeMesh: THREE.Scene | null = null;
-  private _allBaseShapeMesh: BaseShapeMesh[] | null = null;
 
   private _topModel: THREE.Object3D | null = null;
   private _topModelVersion: number = 0;
   private _topModelBounds: THREE.Box3 | null = null;
 
   constructor(libstate: StateManager) {
-    this._libstate = libstate;
+    void libstate;
     makeAutoObservable(this);
   }
 

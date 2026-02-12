@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type NavbarProps = {
   onOrderSampleClick?: () => void;
 };
 
 const Navbar = ({ onOrderSampleClick }: NavbarProps) => {
+  const navigate = useNavigate();
   const sections = useMemo(
     () => [
       { id: "section-base", label: "Base" },
@@ -92,7 +94,14 @@ const Navbar = ({ onOrderSampleClick }: NavbarProps) => {
           </div>
         </div>
         <div className="w-72 flex justify-end">
-          <div className="w-auto flex justify-end 2xl:justify-start">
+          <div className="w-auto flex items-center justify-end gap-3 2xl:justify-start">
+            <button
+              type="button"
+              onClick={() => navigate("/auth?mode=login")}
+              className="hidden md:inline-flex items-center justify-center rounded-full border border-[var(--color-border-color)] px-3 md:px-4 py-2 text-sm lg:text-xs xl:text-base text-[var(--color-font)] hover:bg-[var(--color-grid-bg)] transition-all duration-300 ease-in-out"
+            >
+              Login / Register
+            </button>
             <button
               type="button"
               onClick={onOrderSampleClick}

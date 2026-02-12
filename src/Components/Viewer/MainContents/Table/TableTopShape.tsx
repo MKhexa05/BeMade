@@ -1,5 +1,4 @@
 import { observer } from "mobx-react";
-import { useEffect } from "react";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import { formatLabel } from "../../../../Utils/formatLabel";
 
@@ -8,11 +7,6 @@ const TableTopShape = observer(() => {
   const { tableManager } = designManager;
   const { topShapeManager, baseShapeManager } = tableManager;
 
-  useEffect(() => {
-    void baseShapeManager.loadBaseShapes();
-    void topShapeManager.loadTopShapes();
-  }, [baseShapeManager, topShapeManager]);
-
   const data = topShapeManager.topshapeInfoJson;
 
   const selectedBaseName = baseShapeManager.selectedBaseShapeName;
@@ -20,8 +14,7 @@ const TableTopShape = observer(() => {
     (shape) => shape.name == selectedBaseName,
   );
 
-  // if (!selectedBase) return null;
-
+  const availableTopShapes = selectedBase?.available_topShape ?? [];
   const selectTopShape = (name: string) => {
     topShapeManager.setSelectedTopShapeName(name);
   };
@@ -40,9 +33,7 @@ const TableTopShape = observer(() => {
       <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 gap-y-3">
         {data &&
           data.map((shape) => {
-            const isDisabled = !selectedBase.available_topShape.includes(
-              shape.name,
-            );
+            const isDisabled = !availableTopShapes.includes(shape.name);
             return (
               <div key={shape.name}>
                 <div

@@ -9,10 +9,6 @@ const BaseColor = observer(() => {
   const { tableManager } = designManager;
   const { baseShapeManager } = tableManager;
   const { baseColorManager } = baseShapeManager;
-  useEffect(() => {
-    void baseShapeManager.loadBaseShapes();
-    void baseColorManager.loadBaseColor();
-  }, [baseShapeManager, baseColorManager]);
 
   const data = baseColorManager.baseColorInfoJson;
   const selectedColor = baseColorManager.selectedBaseColor;

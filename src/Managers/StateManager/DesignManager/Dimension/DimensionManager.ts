@@ -2,8 +2,6 @@ import { makeAutoObservable } from "mobx";
 import type { StateManager } from "../../StateManager";
 
 export class DimensionManager {
-  private _libstate: StateManager;
-
   private _maxLength: number = 3180;
   private _minLength: number = 1200;
   private _maxWidth: number = 1300;
@@ -15,7 +13,7 @@ export class DimensionManager {
   private _widthStep: number = 30;
 
   constructor(libstate: StateManager) {
-    this._libstate = libstate;
+    void libstate;
     makeAutoObservable(this);
   }
 

@@ -1,10 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import type { StateManager } from "../../../StateManager";
-import type { BaseColor, BaseColorInfo } from "../../../../../Types/types";
+import type { BaseColorInfo } from "../../../../../Types/types";
 
 export class BaseColorManager {
-  private _libstate: StateManager;
-
   private _baseColorUrl: string = "api/baseColors.json";
   private _baseColorInfoJson: BaseColorInfo[] | null = null;
   private _selectedBaseColor: string | null = null;
@@ -12,7 +10,7 @@ export class BaseColorManager {
   private _error: string | null = null;
 
   constructor(libstate: StateManager) {
-    this._libstate = libstate;
+    void libstate;
     makeAutoObservable(this);
   }
 
@@ -41,10 +39,12 @@ export class BaseColorManager {
 
     try {
       const res = await fetch(this._baseColorUrl);
-      if (!res.ok) throw new Error(`Failed to fetch base colors: ${res.status}`);
+      if (!res.ok)
+        throw new Error(`Failed to fetch base colors: ${res.status}`);
       const json = (await res.json()) as BaseColorInfo[];
 
-      if (!Array.isArray(json)) throw new Error("Base color JSON is not an array");
+      if (!Array.isArray(json))
+        throw new Error("Base color JSON is not an array");
 
       runInAction(() => {
         this._baseColorInfoJson = json;

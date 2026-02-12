@@ -7,7 +7,7 @@ import TopRightButtons from "../Viewer/OnCanvas/TopRightButtons";
 import Base from "./Base/Base";
 import Top from "./Top/Top";
 import Chair from "./Chair/Chair3D";
-import { Suspense, useCallback } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Loader from "./Loader/Loader";
 import { useMainContext } from "../../hooks/useMainContext";
 import ShadowPlane from "./ShadowPlane/ShadowPlane";
@@ -25,8 +25,33 @@ const Viewer3D = observer(() => {
   const { startupLoading } = useViewerBootstrap({ stateManager });
   const { containerRef, isFullscreen, toggleFullscreen } =
     useViewerFullscreen();
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
+
+  const showToast = useCallback((message: string) => {
+    setToastMessage(message);
+    if (toastTimerRef.current !== null) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = window.setTimeout(() => {
+      setToastMessage(null);
+      toastTimerRef.current = null;
+    }, 2200);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current !== null) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
+
   const { handleSaveConfig, handleShareConfig } = useConfigPersistence({
     stateManager,
+    onSaveSuccess: () => showToast("Configuration saved successfully"),
+    onShareSuccess: () => showToast("Share URL copied to clipboard"),
+    onShareFailure: () => showToast("Unable to copy share URL"),
   });
 
   const handleCameraControlsRef = useCallback(
@@ -76,6 +101,13 @@ const Viewer3D = observer(() => {
             <p className="text-sm text-(--color-font)">
               Loading 3D Configurator...
             </p>
+          </div>
+        </div>
+      )}
+      {toastMessage && (
+        <div className="absolute top-16 right-4 z-[140] pointer-events-none">
+          <div className="rounded-md bg-black text-white text-sm px-4 py-2 shadow-lg">
+            {toastMessage}
           </div>
         </div>
       )}

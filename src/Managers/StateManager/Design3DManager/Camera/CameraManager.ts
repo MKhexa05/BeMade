@@ -22,7 +22,6 @@ type CameraAnimationRequest = {
 };
 
 export class CameraManager {
-  private _libstate: StateManager;
   private _cameraRef: RefObject<CameraControls | null> | null = null;
   private _cameraControls: CameraControls | null = null;
   private _presets = new Map<string, CameraPreset>();
@@ -31,7 +30,7 @@ export class CameraManager {
   private _currentPreset: string | null = null;
 
   constructor(libstate: StateManager) {
-    this._libstate = libstate;
+    void libstate;
     makeAutoObservable(this);
   }
 

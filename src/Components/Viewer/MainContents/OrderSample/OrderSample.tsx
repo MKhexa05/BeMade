@@ -9,7 +9,8 @@ import {
   saveCheckoutContext,
 } from "../../../../Utils/designConfig";
 
-const formatName = (value: string) => value.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const formatName = (value: string) =>
+  value.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 type OrderSampleProps = {
   isOpen: boolean;
@@ -31,13 +32,6 @@ const OrderSample = observer(({ isOpen, onClose }: OrderSampleProps) => {
   const [selectedSampleNames, setSelectedSampleNames] = useState<string[]>([]);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isOpen) {
-      void topColorManager.loadTopColors();
-      setSelectedSampleNames([]);
-    }
-  }, [isOpen, topColorManager]);
 
   useEffect(() => {
     if (!isOpen) {

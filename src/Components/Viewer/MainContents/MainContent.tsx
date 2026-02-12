@@ -1,4 +1,3 @@
-import React from "react";
 import RightUI from "./RightUI";
 import Viewer3D from "../../Viewer3D/Viewer3D";
 

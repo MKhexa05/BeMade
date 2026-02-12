@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const Top = observer(() => {
   const { designManager, design3DManager } = useMainContext();
   const { tableManager } = designManager;
-  const { topShapeManager, topColorManager, baseShapeManager } = tableManager;
+  const { topShapeManager, topColorManager } = tableManager;
   const { cameraManager } = design3DManager;
 
   const currentPreset = cameraManager.currentPreset;
@@ -17,13 +17,6 @@ const Top = observer(() => {
   );
 
   const selectedTopColor = topColorManager.selectedTopColor;
-
-  useEffect(() => {
-    // Explicitly load top color data once on mount
-    void topColorManager.loadTopColors();
-    void topShapeManager.loadTopShapes();
-    void baseShapeManager.loadBaseShapes();
-  }, [topColorManager, topShapeManager, baseShapeManager]);
 
   const textureUrl = topColorManager.topColorInfoJson
     ?.map((type) =>

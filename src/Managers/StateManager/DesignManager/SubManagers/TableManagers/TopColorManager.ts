@@ -3,7 +3,6 @@ import type { StateManager } from "../../../StateManager";
 import type { TopColorInfo } from "../../../../../Types/types";
 
 export class TopColorManager {
-  private _libstate: StateManager;
   private _topColorDataUrl: string = "api/topColor.json";
   private _topColorInfoJson: TopColorInfo[] | null = null;
   private _loading: boolean = false;
@@ -11,8 +10,7 @@ export class TopColorManager {
   private _selectedTopColor: string | null = null;
 
   constructor(libstate: StateManager) {
-    this._libstate = libstate;
-
+    void libstate;
     makeAutoObservable(this);
   }
 
