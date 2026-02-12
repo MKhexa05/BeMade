@@ -3,10 +3,13 @@ import { observer } from "mobx-react-lite";
 import { useMainContext } from "../../../../hooks/useMainContext";
 import type { TopColor, TopColorInfo } from "../../../../Types/types";
 import { useNavigate } from "react-router-dom";
-import { ORDER_SAMPLES_STORAGE_KEY } from "../../../../Utils/designConfig";
+import {
+  ORDER_SAMPLES_STORAGE_KEY,
+  buildSampleCheckoutContext,
+  saveCheckoutContext,
+} from "../../../../Utils/designConfig";
 
-const formatName = (value: string) =>
-  value.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const formatName = (value: string) => value.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 type OrderSampleProps = {
   isOpen: boolean;
@@ -16,11 +19,6 @@ type OrderSampleProps = {
 type HoverMeta = {
   color: TopColor;
   side: "right" | "left";
-};
-
-type SelectedSampleItem = {
-  name: string;
-  previewUrl: string;
 };
 
 const OVERLAY_WIDTH = 260;
@@ -71,24 +69,21 @@ const OrderSample = observer(({ isOpen, onClose }: OrderSampleProps) => {
 
   const handleBuyNow = () => {
     if (!selectedSamples.length) return;
+    const sampleItems = selectedSamples.map((item) => ({
+      name: item.name,
+      previewUrl: item.samplePreviewUrl ?? item.previewUrl,
+    }));
     const payload = {
       unitPrice: 20,
-      names: selectedSamples.map((item) => item.name),
-      samples: selectedSamples.map(
-        (item): SelectedSampleItem => ({
-          name: item.name,
-          previewUrl: item.samplePreviewUrl ?? item.previewUrl,
-        }),
-      ),
+      names: sampleItems.map((item) => item.name),
+      samples: sampleItems,
     };
+    const checkoutContext = buildSampleCheckoutContext(sampleItems);
     localStorage.setItem(ORDER_SAMPLES_STORAGE_KEY, JSON.stringify(payload));
+    saveCheckoutContext(checkoutContext);
     onClose();
     navigate("/checkout", {
-      state: {
-        checkoutType: "samples",
-        sampleNames: payload.names,
-        sampleItems: payload.samples,
-      },
+      state: checkoutContext,
     });
   };
 

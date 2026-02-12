@@ -2,6 +2,8 @@ import { observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
 import { useMainContext } from "../../../hooks/useMainContext";
 import {
+  buildTableCheckoutContext,
+  saveCheckoutContext,
   ORDER_PREVIEW_STORAGE_KEY,
   ORDER_SAMPLES_STORAGE_KEY,
 } from "../../../Utils/designConfig";
@@ -15,6 +17,7 @@ const PlaceOrder = observer(() => {
   const navigate = useNavigate();
 
   const handlePlaceOrder = async () => {
+    const checkoutContext = buildTableCheckoutContext();
     const hasChairs = (designManager.chairManager.numberOfChairs ?? 0) > 0;
     const presetId = hasChairs ? "right_chair" : "right";
     design3DManager.cameraManager.requestPresetAnimation(presetId, {
@@ -39,10 +42,9 @@ const PlaceOrder = observer(() => {
       }
     }
     localStorage.removeItem(ORDER_SAMPLES_STORAGE_KEY);
+    saveCheckoutContext(checkoutContext);
     navigate("/checkout", {
-      state: {
-        checkoutType: "table",
-      },
+      state: checkoutContext,
     });
   };
 
