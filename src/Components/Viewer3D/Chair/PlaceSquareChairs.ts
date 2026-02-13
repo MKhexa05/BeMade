@@ -5,8 +5,7 @@ export function placeSquareChairs(
   tableMin: Vector3,
   tableMax: Vector3,
 ) {
-  const length = tableMax.x - tableMin.x;
-  const width = tableMax.z - tableMin.z;
+  const extraGap = 0.15;
   const positions: Vector3[] = [];
 
   if (numberOfChair <= 0) return positions;
@@ -54,38 +53,56 @@ export function placeSquareChairs(
   const leftCount = Math.ceil(widthTotal / 2);
   const rightCount = widthTotal - leftCount;
 
+  const distributeWithExtraGap = (
+    count: number,
+    min: number,
+    max: number,
+  ): number[] => {
+    if (count <= 0) return [];
+    if (count === 1) return [(min + max) * 0.5];
+
+    const center = (min + max) * 0.5;
+    const baseStep = (max - min) / (count + 1);
+    const step = baseStep + extraGap;
+    const totalSpan = step * (count - 1);
+    const start = center - totalSpan * 0.5;
+
+    const values: number[] = [];
+    for (let i = 0; i < count; i++) {
+      const value = start + step * i;
+      values.push(Math.min(max, Math.max(min, value)));
+    }
+    return values;
+  };
+
   // front (min.z) positions along x
   if (frontCount > 0) {
-    for (let i = 1; i <= frontCount; i++) {
-      const t = (i / (frontCount + 1));
-      const x = tableMin.x + t * length ;
+    const xs = distributeWithExtraGap(frontCount, tableMin.x, tableMax.x);
+    for (const x of xs) {
       positions.push(new Vector3(x, 0, tableMin.z));
     }
   }
 
   // back (max.z) positions along x
   if (backCount > 0) {
-    for (let i = 1; i <= backCount; i++) {
-      const t = i / (backCount + 1);
-      const x = tableMin.x + t * length;
+    const xs = distributeWithExtraGap(backCount, tableMin.x, tableMax.x);
+    for (const x of xs) {
       positions.push(new Vector3(x, 0, tableMax.z));
     }
   }
 
   // left (min.x) positions along z
   if (leftCount > 0) {
-    for (let i = 1; i <= leftCount; i++) {
-      const t = i / (leftCount + 1);
-      const z = tableMin.z + t * width;
+    const zs = distributeWithExtraGap(leftCount, tableMin.z, tableMax.z);
+    for (const z of zs) {
       positions.push(new Vector3(tableMin.x, 0, z));
     }
   }
 
   // right (max.x) positions along z
   if (rightCount > 0) {
-    for (let i = 1; i <= rightCount; i++) {
-      const t = i / (rightCount + 1);
-      const z = tableMin.z + t * width;
+    const zs = distributeWithExtraGap(rightCount, tableMin.z, tableMax.z);
+    for (const z of zs) {
       positions.push(new Vector3(tableMax.x, 0, z));
     }
   }
