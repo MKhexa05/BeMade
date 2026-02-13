@@ -79,7 +79,7 @@ export function placeSquareChairs(
   if (frontCount > 0) {
     const xs = distributeWithExtraGap(frontCount, tableMin.x, tableMax.x);
     for (const x of xs) {
-      positions.push(new Vector3(x, 0, tableMin.z));
+      positions.push(new Vector3(x, 0, tableMin.z - 0.15));
     }
   }
 
@@ -87,7 +87,7 @@ export function placeSquareChairs(
   if (backCount > 0) {
     const xs = distributeWithExtraGap(backCount, tableMin.x, tableMax.x);
     for (const x of xs) {
-      positions.push(new Vector3(x, 0, tableMax.z));
+      positions.push(new Vector3(x, 0, tableMax.z + 0.15));
     }
   }
 
@@ -95,7 +95,7 @@ export function placeSquareChairs(
   if (leftCount > 0) {
     const zs = distributeWithExtraGap(leftCount, tableMin.z, tableMax.z);
     for (const z of zs) {
-      positions.push(new Vector3(tableMin.x, 0, z));
+      positions.push(new Vector3(tableMin.x - 0.15, 0, z));
     }
   }
 
@@ -103,7 +103,7 @@ export function placeSquareChairs(
   if (rightCount > 0) {
     const zs = distributeWithExtraGap(rightCount, tableMin.z, tableMax.z);
     for (const z of zs) {
-      positions.push(new Vector3(tableMax.x, 0, z));
+      positions.push(new Vector3(tableMax.x + 0.15, 0, z));
     }
   }
 
