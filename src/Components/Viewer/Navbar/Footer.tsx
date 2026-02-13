@@ -9,7 +9,7 @@ const Footer = observer(() => {
   const { dimensionManager } = designManager;
   return (
     <div className="flex [box-shadow:0px_1px_8px_0px_#00000029] gap-4 items-center p-3 px-6 justify-center">
-      <div className="flex justify-between items-center w-full">
+      <div className="md:flex grid grid-cols-2 justify-between items-center w-full text-[10px] md:text-xs text-(--color-primary) gap-y-3 ">
         <div>
           <label className="text-xs text-[var(--color-font-color)] mb-2">
             Your Build

@@ -45,6 +45,8 @@ const CheckoutPage = observer(() => {
   const [isCheckoutUnlocked, setIsCheckoutUnlocked] = useState(
     isUserAuthenticated(),
   );
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -67,6 +69,7 @@ const CheckoutPage = observer(() => {
   const sampleItems = isSampleCheckout ? checkoutContext.sampleItems : [];
   const sampleNames = isSampleCheckout ? checkoutContext.sampleNames : [];
   const sampleTotal = sampleItems.length * 20;
+  const isPayNowEnabled = isSampleCheckout || hasAgreedToTerms;
 
   const previewImage = useMemo(() => {
     if (isSampleCheckout) return null;
@@ -268,19 +271,23 @@ const CheckoutPage = observer(() => {
                 {!isSampleCheckout && (
                   <button
                     type="button"
+                    onClick={() => setIsTermsModalOpen(true)}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-[#111827] px-8 py-3 text-sm font-medium text-white"
                   >
-                    Terms & Conditions
+                    {hasAgreedToTerms
+                      ? "Terms Accepted"
+                      : "Terms & Conditions"}
                   </button>
                 )}
 
                 <button
                   type="button"
+                  disabled={!isPayNowEnabled}
                   onClick={handlePayNow}
                   className={`inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-sm font-medium transition ${
-                    isSampleCheckout
+                    isPayNowEnabled
                       ? "bg-[#2b2b2b] text-white hover:bg-black"
-                      : "bg-[#d1d5db] text-gray-500"
+                      : "bg-[#d1d5db] text-gray-500 cursor-not-allowed"
                   }`}
                 >
                   Pay Now
@@ -374,6 +381,55 @@ const CheckoutPage = observer(() => {
           </div>
         </div>
       </div>
+      {isTermsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-xl">
+            <h2 className="text-xl font-semibold tracking-tight text-[#111]">
+              Terms & Conditions
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Please review and accept before proceeding to payment.
+            </p>
+
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-700">
+              <li>Orders enter production 48 hours after payment confirmation.</li>
+              <li>Custom specifications cannot be changed once production starts.</li>
+              <li>Lead times may vary based on material availability and demand.</li>
+              <li>Color or finish may vary slightly from on-screen previews.</li>
+              <li>Delivery dates are estimated and subject to courier schedules.</li>
+            </ul>
+
+            <label className="mt-5 flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
+              <input
+                type="checkbox"
+                checked={hasAgreedToTerms}
+                onChange={(event) => setHasAgreedToTerms(event.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#111827] focus:ring-[#111827]"
+              />
+              <span className="text-sm text-gray-700">
+                I have read and agree to these Terms & Conditions.
+              </span>
+            </label>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setIsTermsModalOpen(false)}
+                className="rounded-full border border-gray-300 px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsTermsModalOpen(false)}
+                className="rounded-full bg-[#111827] px-5 py-2 text-sm font-medium text-white hover:bg-black"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 });
