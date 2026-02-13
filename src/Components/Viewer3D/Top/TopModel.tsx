@@ -1,9 +1,11 @@
-import { useGLTF, useTexture } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import type { TopColor, TopShapeInfo } from "../../../Types/types";
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { observer } from "mobx-react";
+import Loader from "../Loader/Loader";
+import { useLazyTexture } from "../hooks/useLazyTexture";
 
 type ModelProps = {
   modelUrl: TopShapeInfo;
@@ -34,7 +36,9 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
         if (!(child instanceof THREE.Mesh)) return;
         if (castShadow) child.castShadow = true;
         if (Array.isArray(child.material)) {
-          child.material = child.material.map(() => new THREE.MeshStandardMaterial());
+          child.material = child.material.map(
+            () => new THREE.MeshStandardMaterial(),
+          );
           child.material.forEach((mat: THREE.Material) => {
             mat.needsUpdate = true;
           });
@@ -50,13 +54,33 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
     prepareSceneMaterials(topMDFModel?.scene, false);
   }, [topModel?.scene, topMDFModel?.scene]);
 
-  const topTextures = useTexture({
-    map: textureUrl.colorUrl,
-    normalMap: textureUrl.normalUrl,
-    roughnessMap: textureUrl.roughnessUrl,
-    metalnessMap: textureUrl.metalnessUrl,
-    topMDFTexture: textureUrl.mdfColorUrl,
-  });
+  const { texture: mapTexture, loading: mapLoading } = useLazyTexture(
+    textureUrl.colorUrl,
+  );
+  const { texture: normalMapTexture, loading: normalMapLoading } =
+    useLazyTexture(textureUrl.normalUrl);
+  const { texture: roughnessMapTexture, loading: roughnessMapLoading } =
+    useLazyTexture(textureUrl.roughnessUrl);
+  const { texture: metalnessMapTexture, loading: metalnessMapLoading } =
+    useLazyTexture(textureUrl.metalnessUrl);
+  const { texture: topMDFTexture, loading: topMDFLoading } = useLazyTexture(
+    textureUrl.mdfColorUrl,
+  );
+
+  const topTextures = {
+    map: mapTexture,
+    normalMap: normalMapTexture,
+    roughnessMap: roughnessMapTexture,
+    metalnessMap: metalnessMapTexture,
+    topMDFTexture,
+  };
+
+  const isTextureLoading =
+    mapLoading ||
+    normalMapLoading ||
+    roughnessMapLoading ||
+    metalnessMapLoading ||
+    topMDFLoading;
 
   useEffect(() => {
     if (topTextures.normalMap) {
@@ -81,6 +105,7 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
     topTextures.metalnessMap,
     topTextures.topMDFTexture,
   ]);
+
   const scaleX = maxLength > 0 ? selectedLength / maxLength : 1;
   const scaleZ = maxWidth > 0 ? selectedWidth / maxWidth : 1;
 
@@ -186,14 +211,9 @@ const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
 
   return (
     <>
-      <primitive
-        object={topModel.scene}
-        scale={[scaleX, 1, scaleZ]}
-      />
-      <primitive
-        object={topMDFModel.scene}
-        scale={[scaleX, 1, scaleZ]}
-      />
+      <primitive object={topModel.scene} scale={[scaleX, 1, scaleZ]} />
+      <primitive object={topMDFModel.scene} scale={[scaleX, 1, scaleZ]} />
+      {isTextureLoading && <Loader />}
     </>
   );
 });

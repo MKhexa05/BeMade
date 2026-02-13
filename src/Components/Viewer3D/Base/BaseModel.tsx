@@ -1,9 +1,11 @@
-import { useGLTF, useTexture } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import type { BaseColor } from "../../../Types/types";
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import { useMainContext } from "../../../hooks/useMainContext";
+import Loader from "../Loader/Loader";
+import { useLazyTexture } from "../hooks/useLazyTexture";
 
 type ModelProps = {
   modelUrl: string;
@@ -91,14 +93,30 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
     });
   }, [selectedLength, selectedBaseShape]);
 
-  // No direct mutation of scene visibility here — rendering controls which model is visible.
+  // No direct mutation of scene visibility here - rendering controls which model is visible.
 
-  const baseTextures = useTexture({
-    map: textureUrl.colorUrl,
-    normalMap: textureUrl.normalUrl,
-    roughnessMap: textureUrl.roughnessUrl,
-    metalnessMap: textureUrl.metalnessUrl,
-  });
+  const { texture: mapTexture, loading: mapLoading } = useLazyTexture(
+    textureUrl.colorUrl,
+  );
+  const { texture: normalMapTexture, loading: normalMapLoading } =
+    useLazyTexture(textureUrl.normalUrl);
+  const { texture: roughnessMapTexture, loading: roughnessMapLoading } =
+    useLazyTexture(textureUrl.roughnessUrl);
+  const { texture: metalnessMapTexture, loading: metalnessMapLoading } =
+    useLazyTexture(textureUrl.metalnessUrl);
+
+  const baseTextures = {
+    map: mapTexture,
+    normalMap: normalMapTexture,
+    roughnessMap: roughnessMapTexture,
+    metalnessMap: metalnessMapTexture,
+  };
+
+  const isTextureLoading =
+    mapLoading ||
+    normalMapLoading ||
+    roughnessMapLoading ||
+    metalnessMapLoading;
 
   useEffect(() => {
     if (baseTextures.normalMap) {
@@ -191,6 +209,7 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
       {smallbaseModel?.scene && (
         <primitive object={smallbaseModel.scene} visible={smallModelActive} />
       )}
+      {isTextureLoading && <Loader />}
     </>
   );
 });
