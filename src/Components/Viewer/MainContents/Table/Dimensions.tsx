@@ -8,6 +8,14 @@ const Dimensions = observer(() => {
   const minLength = dimensionManager.minLength;
   const maxWidth = dimensionManager.maxWidth;
   const minWidth = dimensionManager.minWidth;
+  const lengthSliderStep =
+    (maxLength - minLength) % dimensionManager.lengthStep === 0
+      ? dimensionManager.lengthStep
+      : 1;
+  const widthSliderStep =
+    (maxWidth - minWidth) % dimensionManager.widthStep === 0
+      ? dimensionManager.widthStep
+      : 1;
 
   const topShapeName =
     designManager.tableManager.topShapeManager.selectedTopShapeName ?? "";
@@ -69,7 +77,7 @@ const Dimensions = observer(() => {
                 type="range"
                 min={combinedMin}
                 max={combinedMax}
-                step={dimensionManager.lengthStep}
+                step={lengthSliderStep}
                 className="flex-1 range-slider dim-range"
                 value={Math.round((selectedLength + selectedWidth) / 2)}
                 onChange={(e) => {
@@ -113,7 +121,7 @@ const Dimensions = observer(() => {
                 type="range"
                 min={minLength}
                 max={maxLength}
-                step={dimensionManager.lengthStep}
+                step={lengthSliderStep}
                 className="flex-1 range-slider dim-range"
                 value={selectedLength}
                 onChange={(e) => selectLength(Number(e.target.value))}
@@ -153,7 +161,7 @@ const Dimensions = observer(() => {
                 type="range"
                 min={minWidth}
                 max={maxWidth}
-                step={dimensionManager.widthStep}
+                step={widthSliderStep}
                 className="flex-1 range-slider dim-range"
                 value={selectedWidth}
                 onChange={(e) => selectWidth(Number(e.target.value))}
