@@ -190,6 +190,13 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
         });
       });
     };
+    if (
+      mapLoading ||
+      normalMapLoading ||
+      roughnessMapLoading ||
+      metalnessMapLoading
+    )
+      return;
 
     applyMaterialMaps(gltf?.scene);
     applyMaterialMaps(smallbaseModel?.scene);
@@ -201,6 +208,10 @@ const BaseModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
     baseTextures.roughnessMap,
     baseTextures.metalnessMap,
     selectedBaseShape,
+    mapLoading,
+    metalnessMapLoading,
+    roughnessMapLoading,
+    normalMapLoading,
   ]);
 
   return (

@@ -362,7 +362,7 @@ const CheckoutPage = observer(() => {
                   <img
                     src={previewImage}
                     alt="Design preview"
-                    className="w-full h-[190px] object-cover rounded-md bg-gray-100 border border-gray-200"
+                    className="w-full aspect-video object-cover rounded-md bg-gray-100 border border-gray-200"
                   />
                 </div>
               )}
