@@ -16,6 +16,7 @@
     "mobx": "^6.15.0",
     "mobx-react": "^9.2.1",
     "pdfjs-dist": "^5.4.624",
+    "r3f-perf": "^7.2.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-pdf": "^10.3.0",

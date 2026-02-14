@@ -83,6 +83,5 @@ export function useLazyTexture(url: string) {
     };
   }, [url]);
 
-  console.log(texture, loading);
   return { texture, loading };
 }
