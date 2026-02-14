@@ -10,8 +10,8 @@ type ChairRendererProps = {
   mode?: "table" | "twoChair";
 };
 
-const ChairTempRenderer = observer(
-  ({ chairModel, textureKey, mode = "table" }: ChairRendererProps) => {
+const ChairRenderer = observer(
+  ({ chairModel, mode = "table" }: ChairRendererProps) => {
     const { designManager, design3DManager } = useMainContext();
     const { chairManager, tableManager } = designManager;
     const { topShapeManager } = tableManager;
@@ -26,13 +26,6 @@ const ChairTempRenderer = observer(
     const maxWidth = dimensionManager.maxWidth;
     const ratioX = maxLength > 0 ? selectedLength / maxLength : 1;
     const ratioZ = maxWidth > 0 ? selectedWidth / maxWidth : 1;
-
-    const clones = useMemo(() => {
-      if (!chairModel || numberOfChairs === 0) return [] as THREE.Object3D[];
-      return Array.from({ length: numberOfChairs }, () =>
-        chairModel.clone(true),
-      );
-    }, [chairModel, numberOfChairs, textureKey]);
 
     const placements = useMemo(
       () =>
@@ -53,7 +46,7 @@ const ChairTempRenderer = observer(
     return (
       <group>
         {placements.map((placement, i) => {
-          const instance = clones[i] ?? chairModel.clone(true);
+          const instance = chairModel.clone(true);
           return (
             <group
               key={i}
@@ -69,4 +62,4 @@ const ChairTempRenderer = observer(
   },
 );
 
-export default ChairTempRenderer;
+export default ChairRenderer;

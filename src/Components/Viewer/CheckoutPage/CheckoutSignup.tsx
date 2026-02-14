@@ -19,6 +19,7 @@ const CheckoutSignup = ({
 
   return (
     <div className="w-full max-w-[460px] rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      {/* Back Button */}
       <button
         type="button"
         onClick={onBack}
@@ -26,10 +27,12 @@ const CheckoutSignup = ({
       >
         Back
       </button>
+      {/* Heading */}
       <h2 className="mt-2 text-center text-3xl font-semibold tracking-tight text-[#111]">
         Sign Up
       </h2>
 
+      {/* Form */}
       <div className="mt-6 space-y-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -88,6 +91,7 @@ const CheckoutSignup = ({
         </div>
       </div>
 
+      {/* SignUp Button */}
       <button
         type="button"
         onClick={onSignup}
@@ -96,6 +100,7 @@ const CheckoutSignup = ({
         Sign Up
       </button>
 
+      {/* Go Login */}
       <p className="mt-5 text-center text-sm text-gray-800">
         Already have an account?{" "}
         <button

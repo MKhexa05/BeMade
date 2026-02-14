@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CheckoutLogin from "./CheckoutLogin";
 import CheckoutSignup from "./CheckoutSignup";
 import { setUserAuthenticated } from "../../../Utils/auth";
@@ -8,14 +8,7 @@ type AuthMode = "login" | "signup";
 
 const AuthPage = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  const initialMode = useMemo<AuthMode>(() => {
-    const mode = searchParams.get("mode");
-    return mode === "signup" ? "signup" : "login";
-  }, [searchParams]);
-
-  const [mode, setMode] = useState<AuthMode>(initialMode);
+  const [mode, setMode] = useState<AuthMode>("login");
 
   const handleSuccess = () => {
     setUserAuthenticated(true);

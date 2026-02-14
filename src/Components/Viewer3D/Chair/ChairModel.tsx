@@ -3,8 +3,8 @@ import type { ChairColorInfo } from "../../../Types/types";
 import * as THREE from "three";
 import { useEffect, useMemo } from "react";
 import { observer } from "mobx-react";
-import ChairTempRenderer from "./ChairTempRenderer";
 import { useMainContext } from "../../../hooks/useMainContext";
+import ChairRenderer from "./ChairRenderer";
 
 type ModelProps = {
   chairModelUrl: string;
@@ -105,7 +105,7 @@ const ChairModel = observer(
     return (
       <>
         {numberOfChairs && (
-          <ChairTempRenderer
+          <ChairRenderer
             chairModel={sceneWithTextures ?? chairModel.scene}
             textureKey={textureKey}
             mode={mode}
