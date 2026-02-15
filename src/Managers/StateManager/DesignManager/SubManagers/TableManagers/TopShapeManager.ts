@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import type { TopShapeInfo } from "../../../../../Types/types";
 import type { StateManager } from "../../../StateManager";
 
@@ -14,6 +14,23 @@ export class TopShapeManager {
   constructor(libstate: StateManager) {
     this._libstate = libstate;
     makeAutoObservable(this);
+
+    reaction(
+      () => ({
+        selected: this._selectedTopShapeName,
+      }),
+      ({ selected }) => {
+        if (!selected) return;
+
+        const designManager = this._libstate.designManager;
+        const dimensionManager = designManager.dimensionManager;
+
+        runInAction(() => {
+          dimensionManager.setSelectedLength(dimensionManager.maxLength);
+          dimensionManager.setSelectedWidth(dimensionManager.maxWidth);
+        });
+      },
+    );
   }
 
   get topshapeInfoJson() {
