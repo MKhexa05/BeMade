@@ -20,10 +20,16 @@ const BaseColor = observer(() => {
     : [];
 
   useEffect(() => {
-    if (colorsForSelectedShape && colorsForSelectedShape.length) {
+    if (!colorsForSelectedShape || !colorsForSelectedShape.length) return;
+
+    const hasValidSelectedColor =
+      !!selectedColor &&
+      colorsForSelectedShape.some((color) => color.name === selectedColor);
+
+    if (!hasValidSelectedColor) {
       baseColorManager.setSelectedBaseColor(colorsForSelectedShape[0].name);
     }
-  }, [colorsForSelectedShape]);
+  }, [colorsForSelectedShape, selectedColor, baseColorManager]);
 
   const selectBaseColor = (name: string) => {
     baseColorManager.setSelectedBaseColor(name);
