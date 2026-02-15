@@ -77,7 +77,6 @@ export const useCameraPresetWorkflow = (): UseCameraPresetWorkflowResult => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const initializedRef = useRef(false);
-  const autoSwitchEnabledRef = useRef(false);
   const prevBaseShapeRef = useRef<string | null>(null);
   const prevBaseColorRef = useRef<string | null>(null);
   const prevTopShapeRef = useRef<string | null>(null);
@@ -142,50 +141,27 @@ export const useCameraPresetWorkflow = (): UseCameraPresetWorkflowResult => {
 
   useEffect(() => {
     if (!initializedRef.current) return;
-    if (autoSwitchEnabledRef.current) return;
-
-    const ready =
-      !!baseShapeManager.selectedBaseShapeName &&
-      !!baseColorManager.selectedBaseColor &&
-      !!topShapeManager.selectedTopShapeName &&
-      !!topColorManager.selectedTopColor;
-    if (!ready) return;
-
-    autoSwitchEnabledRef.current = true;
-    prevBaseShapeRef.current = baseShapeManager.selectedBaseShapeName;
-    prevBaseColorRef.current = baseColorManager.selectedBaseColor;
-    prevTopShapeRef.current = topShapeManager.selectedTopShapeName;
-    prevTopColorRef.current = topColorManager.selectedTopColor;
-    prevChairCountRef.current = chairCount;
-  }, [
-    baseShapeManager.selectedBaseShapeName,
-    baseColorManager.selectedBaseColor,
-    topShapeManager.selectedTopShapeName,
-    topColorManager.selectedTopColor,
-    chairCount,
-  ]);
-
-  useEffect(() => {
-    if (!initializedRef.current || !autoSwitchEnabledRef.current) return;
 
     const baseShape = baseShapeManager.selectedBaseShapeName;
     const baseColor = baseColorManager.selectedBaseColor;
     const topShape = topShapeManager.selectedTopShapeName;
     const topColor = topColorManager.selectedTopColor;
-    const chairIncreasedFromZero =
-      prevChairCountRef.current <= 0 && chairCount > 0;
+    const previousBaseShape = prevBaseShapeRef.current;
+    const previousBaseColor = prevBaseColorRef.current;
+    const previousTopShape = prevTopShapeRef.current;
+    const previousTopColor = prevTopColorRef.current;
+    const previousChairCount = prevChairCountRef.current;
 
-    if (chairIncreasedFromZero && hasChairs) {
+    const chairCountChanged = previousChairCount !== chairCount;
+    const baseChanged =
+      baseShape !== previousBaseShape || baseColor !== previousBaseColor;
+    const topChanged = topShape !== previousTopShape || topColor !== previousTopColor;
+
+    if (chairCountChanged && chairCount > 0 && hasChairs) {
       applyByPresetId("right_chair", 1300);
-    } else if (
-      baseShape !== prevBaseShapeRef.current ||
-      baseColor !== prevBaseColorRef.current
-    ) {
+    } else if (baseChanged) {
       applyByPresetId("front", 1200);
-    } else if (
-      topShape !== prevTopShapeRef.current ||
-      topColor !== prevTopColorRef.current
-    ) {
+    } else if (topChanged) {
       applyByPresetId("top", 1200);
     }
 

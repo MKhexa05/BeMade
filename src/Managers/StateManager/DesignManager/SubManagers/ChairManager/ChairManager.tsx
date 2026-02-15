@@ -195,6 +195,10 @@ export class ChairManager {
           result = numberData.square.find((r) => r.size === length);
         }
 
+        // Keep current chair selection when there is no matching fit row
+        // for the current dimension, instead of forcing chairs to 0.
+        if (!result) return;
+
         runInAction(() => {
           this._tightFit = result?.tightFit ?? 0;
           this._comfortFit = result?.comfortFit ?? 0;

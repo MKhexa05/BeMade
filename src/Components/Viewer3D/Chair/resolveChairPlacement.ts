@@ -45,7 +45,13 @@ export const resolveChairPlacement = ({
   if (shape === "oval") {
     const radiusX = (tableBox.max.x - tableBox.min.x) * 0.5;
     const radiusZ = (tableBox.max.z - tableBox.min.z) * 0.5;
-    const placements = placeOvalChairs(numberOfChairs, radiusX, radiusZ, 0.12, 0.28);
+    const placements = placeOvalChairs(
+      numberOfChairs,
+      radiusX,
+      radiusZ,
+      0.12,
+      0.28,
+    );
 
     return placements.map((placement) => ({
       position: [
@@ -72,11 +78,7 @@ export const resolveChairPlacement = ({
       }
 
       return {
-        position: [
-          placement.x * ratioX,
-          placement.y,
-          placement.z * ratioZ,
-        ],
+        position: [placement.x * ratioX, placement.y, placement.z * ratioZ],
         rotationY,
       };
     });
