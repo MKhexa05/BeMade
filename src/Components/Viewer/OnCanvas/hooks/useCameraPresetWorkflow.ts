@@ -155,7 +155,10 @@ export const useCameraPresetWorkflow = (): UseCameraPresetWorkflowResult => {
     const chairCountChanged = previousChairCount !== chairCount;
     const baseChanged =
       baseShape !== previousBaseShape || baseColor !== previousBaseColor;
-    const topChanged = topShape !== previousTopShape || topColor !== previousTopColor;
+    const topChanged =
+      previousTopShape !== null &&
+      previousTopColor !== null &&
+      (topShape !== previousTopShape || topColor !== previousTopColor);
 
     if (chairCountChanged && chairCount > 0 && hasChairs) {
       applyByPresetId("right_chair", 1300);
