@@ -4,29 +4,12 @@ import { formatLabel } from "../../../../Utils/formatLabel";
 
 const Base = observer(() => {
   const { designManager } = useMainContext();
-  const { tableManager, dimensionManager } = designManager;
+  const { tableManager } = designManager;
   const { baseShapeManager } = tableManager;
 
   const data = baseShapeManager.baseShapeInfo;
 
   const selectBase = (name: string) => {
-    const selectedBaseShapeInfo = data?.find((shape) => shape.name == name);
-    if (selectedBaseShapeInfo) {
-      if (name == "linea-dome") {
-        console.log(name);
-        dimensionManager.setMaxWidth(selectedBaseShapeInfo.maxLength);
-        dimensionManager.setMinWidth(selectedBaseShapeInfo.minLength);
-        // dimensionManager.setSelectedLength(dimensionManager.selectedLength);
-        // dimensionManager.setSelectedWidth(dimensionManager.selectedLength);
-      } else {
-        dimensionManager.setMaxWidth(1300);
-        dimensionManager.setMinWidth(800);
-      }
-      dimensionManager.setMaxLength(selectedBaseShapeInfo.maxLength);
-      dimensionManager.setMinLength(selectedBaseShapeInfo.minLength);
-      // dimensionManager.setSelectedLength(dimensionManager.maxLength);
-      // dimensionManager.setSelectedWidth(dimensionManager.maxWidth);
-    }
     baseShapeManager.setSelectedBaseShapeName(name);
   };
   const selectedBase = baseShapeManager.selectedBaseShapeName;

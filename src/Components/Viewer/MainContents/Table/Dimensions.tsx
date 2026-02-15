@@ -111,7 +111,6 @@ const Dimensions = observer(() => {
                 type="button"
                 className="flex items-center justify-center gap-2 dim-btn"
                 onClick={() => {
-                  console.log("button minues");
                   dimensionManager.adjustLengthBy(-100);
                 }}
               >
