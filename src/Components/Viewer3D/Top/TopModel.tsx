@@ -37,7 +37,6 @@ export const TopModel = observer(
     );
 
     const preparedMDF = useMemo(() => {
-      console.log("mdfpreparedagain");
       return prepareTopScene(mdfGLTF.scene);
     }, [modelUrl.modelMDFUrl]);
 
@@ -50,20 +49,6 @@ export const TopModel = observer(
       dimensionManager.maxWidth > 0
         ? dimensionManager.selectedWidth / dimensionManager.maxWidth
         : 1;
-
-    // const topTextureRef = useMemo(() => {
-    //   console.log(preparedTop.meshes);
-    //   for (const mesh of preparedTop.meshes) {
-    //     console.log(mesh.material);
-    //     const mat = mesh.material as THREE.MeshStandardMaterial;
-    //     console.log(mat.map);
-    //     if (mat.map) {
-    //       return mat.map;
-    //     }
-    //   }
-    //   return null;
-    // }, [preparedTop]);
-
     useEffect(() => {
       const { map, normalMap, roughnessMap, metalnessMap } =
         topTexturesRef.current;

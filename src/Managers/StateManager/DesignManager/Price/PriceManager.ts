@@ -80,7 +80,6 @@ export class PriceManager {
 
       runInAction(() => {
         this._priceInfoJson = json;
-        // console.log(this._priceInfoJson);
       });
     })().finally(() => {
       this._loadPricingPromise = null;
