@@ -1,6 +1,6 @@
 import { useMainContext } from "../../../hooks/useMainContext";
 import { observer } from "mobx-react";
-import TopModel from "./TopModel";
+import { TopModel } from "./TopModel";
 
 const Top = observer(() => {
   const { designManager, design3DManager } = useMainContext();

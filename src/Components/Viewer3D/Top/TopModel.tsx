@@ -1,221 +1,131 @@
+import { useEffect, useMemo, useRef } from "react";
+import Loader from "../Loader/Loader";
+import { TopMaterialBinder } from "./TopMaterialBinder";
+import { TopTextureLayer } from "./TopTexture";
+import { prepareTopScene } from "./pepareTopScene";
 import { useGLTF } from "@react-three/drei";
-import type { TopColor, TopShapeInfo } from "../../../Types/types";
-import * as THREE from "three";
-import { useEffect, useRef } from "react";
 import { useMainContext } from "../../../hooks/useMainContext";
 import { observer } from "mobx-react";
-import Loader from "../Loader/Loader";
-import { useLazyTexture } from "../hooks/useLazyTexture";
+import type { TopColor, TopShapeInfo } from "../../../Types/types";
+import * as THREE from "three";
 
-type ModelProps = {
-  modelUrl: TopShapeInfo;
-  textureUrl: TopColor;
-};
+export const TopModel = observer(
+  ({
+    modelUrl,
+    textureUrl,
+  }: {
+    modelUrl: TopShapeInfo;
+    textureUrl: TopColor;
+  }) => {
+    const { designManager, design3DManager } = useMainContext();
+    const { dimensionManager } = designManager;
+    const { baseMeshManager } = design3DManager;
 
-const TopModel = observer(({ modelUrl, textureUrl }: ModelProps) => {
-  const { designManager, design3DManager } = useMainContext();
-  const { dimensionManager } = designManager;
-  const { baseMeshManager } = design3DManager;
+    const topGLTF = useGLTF(modelUrl.modelUrl);
+    const mdfGLTF = useGLTF(modelUrl.modelMDFUrl);
 
-  const selectedLength = dimensionManager.selectedLength;
-  const maxLength = dimensionManager.maxLength;
-  const selectedWidth = dimensionManager.selectedWidth;
-  const maxWidth = dimensionManager.maxWidth;
+    const topTexturesRef = useRef<{
+      map?: THREE.Texture;
+      normalMap?: THREE.Texture;
+      roughnessMap?: THREE.Texture;
+      metalnessMap?: THREE.Texture;
+    }>({});
 
-  const topModel = useGLTF(modelUrl.modelUrl);
-  const topMDFModel = useGLTF(modelUrl.modelMDFUrl);
-  const preparedScenesRef = useRef(new WeakSet<THREE.Object3D>());
+    const preparedTop = useMemo(
+      () => prepareTopScene(topGLTF.scene),
+      [modelUrl.modelUrl],
+    );
 
-  useEffect(() => {
-    const prepareSceneMaterials = (
-      scene: THREE.Object3D | null | undefined,
-      castShadow: boolean,
-    ) => {
-      if (!scene || preparedScenesRef.current.has(scene)) return;
-      scene.traverse((child) => {
-        if (!(child instanceof THREE.Mesh)) return;
-        if (castShadow) child.castShadow = true;
-        if (Array.isArray(child.material)) {
-          child.material = child.material.map(
-            () => new THREE.MeshStandardMaterial(),
-          );
-          child.material.forEach((mat: THREE.Material) => {
-            mat.needsUpdate = true;
-          });
-        } else {
-          child.material = new THREE.MeshStandardMaterial();
-          child.material.needsUpdate = true;
-        }
-      });
-      preparedScenesRef.current.add(scene);
-    };
+    const preparedMDF = useMemo(() => {
+      console.log("mdfpreparedagain");
+      return prepareTopScene(mdfGLTF.scene);
+    }, [modelUrl.modelMDFUrl]);
 
-    prepareSceneMaterials(topModel?.scene, true);
-    prepareSceneMaterials(topMDFModel?.scene, false);
-  }, [topModel?.scene, topMDFModel?.scene]);
+    const scaleX =
+      dimensionManager.maxLength > 0
+        ? dimensionManager.selectedLength / dimensionManager.maxLength
+        : 1;
 
-  const { texture: mapTexture, loading: mapLoading } = useLazyTexture(
-    textureUrl.colorUrl,
-  );
-  const { texture: normalMapTexture, loading: normalMapLoading } =
-    useLazyTexture(textureUrl.normalUrl);
-  const { texture: roughnessMapTexture, loading: roughnessMapLoading } =
-    useLazyTexture(textureUrl.roughnessUrl);
-  const { texture: metalnessMapTexture, loading: metalnessMapLoading } =
-    useLazyTexture(textureUrl.metalnessUrl);
-  const { texture: topMDFTexture, loading: topMDFLoading } = useLazyTexture(
-    textureUrl.mdfColorUrl,
-  );
+    const scaleZ =
+      dimensionManager.maxWidth > 0
+        ? dimensionManager.selectedWidth / dimensionManager.maxWidth
+        : 1;
 
-  const topTextures = {
-    map: mapTexture,
-    normalMap: normalMapTexture,
-    roughnessMap: roughnessMapTexture,
-    metalnessMap: metalnessMapTexture,
-    topMDFTexture,
-  };
+    // const topTextureRef = useMemo(() => {
+    //   console.log(preparedTop.meshes);
+    //   for (const mesh of preparedTop.meshes) {
+    //     console.log(mesh.material);
+    //     const mat = mesh.material as THREE.MeshStandardMaterial;
+    //     console.log(mat.map);
+    //     if (mat.map) {
+    //       return mat.map;
+    //     }
+    //   }
+    //   return null;
+    // }, [preparedTop]);
 
-  const isTextureLoading =
-    mapLoading ||
-    normalMapLoading ||
-    roughnessMapLoading ||
-    metalnessMapLoading ||
-    topMDFLoading;
+    useEffect(() => {
+      const { map, normalMap, roughnessMap, metalnessMap } =
+        topTexturesRef.current;
 
-  useEffect(() => {
-    if (topTextures.normalMap) {
-      topTextures.normalMap.colorSpace = THREE.LinearSRGBColorSpace;
-    }
-    if (topTextures.roughnessMap) {
-      topTextures.roughnessMap.colorSpace = THREE.LinearSRGBColorSpace;
-    }
-    if (topTextures.metalnessMap) {
-      topTextures.metalnessMap.colorSpace = THREE.LinearSRGBColorSpace;
-    }
-    if (topTextures.map) {
-      topTextures.map.colorSpace = THREE.SRGBColorSpace;
-    }
-    if (topTextures.topMDFTexture) {
-      topTextures.topMDFTexture.colorSpace = THREE.SRGBColorSpace;
-    }
-  }, [
-    topTextures.map,
-    topTextures.normalMap,
-    topTextures.roughnessMap,
-    topTextures.metalnessMap,
-    topTextures.topMDFTexture,
-  ]);
-
-  const scaleX = maxLength > 0 ? selectedLength / maxLength : 1;
-  const scaleZ = maxWidth > 0 ? selectedWidth / maxWidth : 1;
-
-  useEffect(() => {
-    [
-      topTextures.map,
-      topTextures.normalMap,
-      topTextures.roughnessMap,
-      topTextures.metalnessMap,
-      topTextures.topMDFTexture,
-    ].forEach((texture) => {
-      if (!texture) return;
-      texture.flipY = false;
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
       const repeatX = Math.max(scaleX, 0.0001);
       const repeatZ = Math.max(scaleZ, 0.0001);
-      texture.center.set(0.5, 0.5);
-      texture.repeat.set(repeatX, repeatZ);
-      // Keep the texture anchored around model center while repeat changes.
-      texture.offset.set((1 - repeatX) * 0.5, (1 - repeatZ) * 0.5);
-      texture.needsUpdate = true;
-    });
-  }, [
-    topTextures.map,
-    topTextures.normalMap,
-    topTextures.roughnessMap,
-    topTextures.metalnessMap,
-    topTextures.topMDFTexture,
-    scaleX,
-    scaleZ,
-  ]);
 
-  useEffect(() => {
-    topModel.scene.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) return;
-      const mats = Array.isArray(child.material)
-        ? child.material
-        : [child.material];
-      mats.forEach((mat) => {
-        if (!(mat instanceof THREE.MeshStandardMaterial)) return;
-        mat.map = topTextures.map ?? null;
-        mat.normalMap = topTextures.normalMap ?? null;
-        mat.metalnessMap = topTextures.metalnessMap ?? null;
-        mat.roughnessMap = topTextures.roughnessMap ?? null;
-        mat.needsUpdate = true;
+      [map, normalMap, roughnessMap, metalnessMap].forEach((tex) => {
+        if (!tex) return;
+
+        if (modelUrl.modelUrl.includes("round")) {
+          tex.center.set(-0.3, 0.3);
+        } else {
+          tex.center.set(0, 0.3);
+        }
+        tex.repeat.set(repeatX, repeatZ);
+        tex.offset.set((1 - repeatX) * 0.5, (1 - repeatZ) * 0.5);
       });
-    });
-  }, [
-    topModel.scene,
-    topTextures.map,
-    topTextures.normalMap,
-    topTextures.metalnessMap,
-    topTextures.roughnessMap,
-  ]);
+    }, [scaleX, scaleZ]);
 
-  useEffect(() => {
-    topMDFModel.scene.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) return;
-      const mats = Array.isArray(child.material)
-        ? child.material
-        : [child.material];
-      mats.forEach((mat) => {
-        if (!(mat instanceof THREE.MeshStandardMaterial)) return;
-        mat.map = topTextures.topMDFTexture ?? null;
-        mat.needsUpdate = true;
-      });
-    });
-  }, [topMDFModel.scene, topTextures.topMDFTexture]);
+    // useEffect(() => {
+    //   preparedTop.meshes.forEach((mesh) => {
+    //     const mat = mesh.material as THREE.MeshStandardMaterial;
+    //     if (!mat.map) return;
 
-  // const animatorRef = useRef(new ScaleAnimator(0.12));
+    //     const repeatX = Math.max(scaleX, 0.0001);
+    //     const repeatZ = Math.max(scaleZ, 0.0001);
+    //     mat.map.center.set(0, 0.3);
+    //     mat.map.repeat.set(repeatX, repeatZ);
+    //     // Keep the texture anchored around model center while repeat changes.
+    //     mat.map.offset.set((1 - repeatX) * 0.5, (1 - repeatZ) * 0.5);
 
-  useEffect(() => {
-    baseMeshManager.setTopModel(topModel.scene);
-  }, [baseMeshManager, topModel.scene]);
+    //     mat.map.needsUpdate = true;
+    //   });
+    // }, [scaleX, scaleZ, preparedTop.meshes]);
 
-  // useEffect(() => {
-  //   const sx = selectedLength / maxLength;
-  //   const sz = selectedWidth / maxWidth;
-  //   animatorRef.current.setTarget(new THREE.Vector3(sx, 1, sz));
-  //   animatorRef.current.setOnFinished(() => {
-  //     try {
-  //       topModel.scene.updateMatrixWorld(true);
-  //       topMDFModel.scene.updateMatrixWorld(true);
-  //     } catch {
-  //       console.log("Error updating world matrices for top models");
-  //     }
-  //     baseMeshManager.setTopModel(topModel.scene);
-  //   });
-  // }, [
-  //   selectedLength,
-  //   selectedWidth,
-  //   maxLength,
-  //   maxWidth,
-  //   topModel,
-  //   topMDFModel,
-  //   baseMeshManager,
-  // ]);
+    useEffect(() => {
+      baseMeshManager.setTopModel(preparedTop.root);
+    }, [baseMeshManager, preparedTop]);
 
-  // useFrame(() => {
-  //   animatorRef.current.update();
-  // });
+    return (
+      <TopTextureLayer textureUrl={textureUrl}>
+        {(textures) => (
+          <>
+            <TopMaterialBinder
+              preparedTop={preparedTop}
+              preparedMDF={preparedMDF}
+              textures={textures}
+              onTopTexturesReady={(tex) => {
+                topTexturesRef.current = tex;
+              }}
+            />
 
-  return (
-    <>
-      <primitive object={topModel.scene} scale={[scaleX, 1, scaleZ]} />
-      <primitive object={topMDFModel.scene} scale={[scaleX, 1, scaleZ]} />
-      {isTextureLoading && <Loader />}
-    </>
-  );
-});
+            <group scale={[scaleX, 1, scaleZ]}>
+              <primitive object={preparedTop.root} />
+              <primitive object={preparedMDF.root} />
+            </group>
 
-export default TopModel;
+            {textures.loading && <Loader />}
+          </>
+        )}
+      </TopTextureLayer>
+    );
+  },
+);
