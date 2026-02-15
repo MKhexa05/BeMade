@@ -62,6 +62,9 @@ export class BaseShapeManager {
           // snap them to the new maximum (per requested behavior).
           dimensionManager.setSelectedLength(dimensionManager.maxLength);
           dimensionManager.setSelectedWidth(dimensionManager.maxWidth);
+          if (this.selectedBaseShapeName == "moon") {
+            dimensionManager.setSelectedLength(2900);
+          }
         });
       },
     );
